@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,13 +184,13 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../node_modules/bulma/bulma.sass":[function(require,module,exports) {
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"../node_modules/bulma/bulma.sass":[function(require,module,exports) {
 
         var reloadCSS = require('_css_loader');
         module.hot.dispose(reloadCSS);
         module.hot.accept(reloadCSS);
       
-},{"_css_loader":"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -1226,7 +1226,7 @@ module.exports = function xhrAdapter(config) {
   });
 };
 
-},{"./../utils":"../node_modules/axios/lib/utils.js","./../core/settle":"../node_modules/axios/lib/core/settle.js","./../helpers/buildURL":"../node_modules/axios/lib/helpers/buildURL.js","../core/buildFullPath":"../node_modules/axios/lib/core/buildFullPath.js","./../helpers/parseHeaders":"../node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"../node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"../node_modules/axios/lib/core/createError.js","./../helpers/cookies":"../node_modules/axios/lib/helpers/cookies.js"}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/node_modules/process/browser.js":[function(require,module,exports) {
+},{"./../utils":"../node_modules/axios/lib/utils.js","./../core/settle":"../node_modules/axios/lib/core/settle.js","./../helpers/buildURL":"../node_modules/axios/lib/helpers/buildURL.js","../core/buildFullPath":"../node_modules/axios/lib/core/buildFullPath.js","./../helpers/parseHeaders":"../node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"../node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"../node_modules/axios/lib/core/createError.js","./../helpers/cookies":"../node_modules/axios/lib/helpers/cookies.js"}],"../node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -1535,7 +1535,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-},{"./utils":"../node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"../node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"../node_modules/axios/lib/adapters/xhr.js","./adapters/http":"../node_modules/axios/lib/adapters/xhr.js","process":"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/node_modules/process/browser.js"}],"../node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
+},{"./utils":"../node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"../node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"../node_modules/axios/lib/adapters/xhr.js","./adapters/http":"../node_modules/axios/lib/adapters/xhr.js","process":"../node_modules/process/browser.js"}],"../node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -1953,32 +1953,201 @@ module.exports.default = axios;
 
 },{"./utils":"../node_modules/axios/lib/utils.js","./helpers/bind":"../node_modules/axios/lib/helpers/bind.js","./core/Axios":"../node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"../node_modules/axios/lib/core/mergeConfig.js","./defaults":"../node_modules/axios/lib/defaults.js","./cancel/Cancel":"../node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"../node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"../node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"../node_modules/axios/lib/helpers/spread.js"}],"../node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"assets/style.scss":[function(require,module,exports) {
-var reloadCSS = require('_css_loader');
-
-module.hot.dispose(reloadCSS);
-module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"index.js":[function(require,module,exports) {
+},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("bulma");
 
 var _axios = _interopRequireDefault(require("axios"));
 
-require("./assets/style.scss");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log('hello world');
+//import './assets/style.scss';
+// import { Identification } from './partiaux/identification/identification.js';
+// const identification = new Identification();
+// console.log(identification.hello());
+
+/*
+*
+*
+*
+* Identification
+* -MC6dhG-do2hOxQyfH6O
+*
+*
+*
+*/
+var identificationForm = document.querySelector('#identification');
+identificationForm.addEventListener('click', function (ev) {
+  return identification(ev);
+});
+
+var identification = function identification(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== 'BUTTON') return;
+  var urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs.json';
+  var idVisiteur = identificationForm.querySelector('#id-visiteur').value;
+  if (idVisiteur === "") return;
+
+  _axios.default.get(urlPost).then(function (response) {
+    if (response.data[idVisiteur]) {
+      console.log(response.data[idVisiteur]);
+
+      var _entrerForm = document.querySelector('#entrer');
+
+      var idVisiteurInput = document.querySelector('#visite-visiteur');
+      idVisiteurInput.value = idVisiteur;
+    }
+  });
+};
+/*
+*
+*
+*
+* Inscription
+*
+*
+*
+*/
+
+
+var inscriptionForm = document.querySelector('#inscription');
+inscriptionForm.addEventListener('click', function (ev) {
+  return inscription(ev);
+});
+
+var inscription = function inscription(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== 'BUTTON') return;
+  var visiteurNom = inscriptionForm.querySelector('#inscription-nom').value;
+  var visiteurPrenom = inscriptionForm.querySelector('#inscription-prenom').value;
+  var visiteurEmail = inscriptionForm.querySelector('#inscription-email').value;
+  var urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs.json';
+  var nouveauVisiteur = {
+    "nom": visiteurNom,
+    "prenom": visiteurPrenom,
+    "email": visiteurEmail,
+    "photo": "hello.jpg"
+  };
+
+  _axios.default.post(urlPost, nouveauVisiteur).then(function (response) {});
+};
+/*
+*
+*
+*
+* Entrer
+*
+*
+*
+*/
+
+
+var entrerForm = document.querySelector('#entrer');
+var visiteObjet = document.querySelector('#visite-objet');
+var visiteFormation = document.querySelector('#visite-formation');
+var visitePersonnel = document.querySelector('#visite-personnel');
+entrerForm.addEventListener('click', function (ev) {
+  return entrer(ev);
+});
+visiteObjet.addEventListener('change', function (ev) {
+  return objetDeLaVisite(ev);
+});
+
+var objetDeLaVisite = function objetDeLaVisite(ev) {
+  ev.preventDefault();
+  /*
+  *
+  * Formation
+  *
+  */
+
+  if (ev.target.value === "formation") {
+    var urlPost = 'https://mathieu.go.yo.fr/wp-json/wp/v2/formations';
+    var urlCF = 'http://mathieu.go.yo.fr/wp-json/acf/v3/formations/';
+
+    _axios.default.get(urlPost).then(function (response) {
+      response.data.forEach(function (el) {
+        var formationID = el.id;
+        var formationTitle = el.title.rendered;
+
+        _axios.default.get(urlCF + formationID).then(function (response) {
+          var formationLocal = response.data.acf.local;
+          var formationDebut = response.data.acf.formations_date_de_debut.split('/').reverse().join('');
+          var formationFin = response.data.acf.formations_date_de_fin.split('/').reverse().join('');
+          var myDate = new Date();
+          var myDay = ("0" + myDate.getDate()).slice(-2);
+          var myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
+          var today = myDate.getFullYear() + '' + myMonth + '' + myDay;
+
+          if (isBetween(today, formationDebut, formationFin) !== false) {
+            visiteFormation.innerHTML += '<option value="' + formationID + '" data-local="' + formationLocal + '">' + formationTitle + '</option>';
+          }
+        });
+      });
+    });
+  }
+  /*
+  *
+  * Personnel
+  *
+  */
+
+
+  if (ev.target.value === "personnel") {
+    var _urlPost = 'http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel';
+    var _urlCF = 'http://mathieu.go.yo.fr/wp-json/acf/v3/membres_personnel/';
+
+    _axios.default.get(_urlPost).then(function (response) {
+      response.data.forEach(function (el) {
+        var personnelID = el.id;
+        var personnelTitle = el.title.rendered;
+
+        _axios.default.get(_urlCF + personnelID).then(function (response) {
+          var personnelLocal = response.data.acf.local;
+          visiteFormation.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + '</option>';
+        });
+      });
+    });
+  }
+};
+
+function isBetween(n, a, b) {
+  return (n - a) * (n - b) <= 0;
+}
+/*
+*
+* Entrer
+*
+*/
+
+
+var entrer = function entrer(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== 'BUTTON') return;
+  if (visiteObjet.value !== 'formation' && visiteObjet.value !== 'personnel') return;
+
+  if (visiteObjet.value === 'formation') {
+    console.log(visiteObjet.value, visiteFormation.value);
+  } else if (visiteObjet.value === 'personnel') {
+    console.log(visiteObjet.value, visitePersonnel.value);
+  }
+
+  var urlPost = 'https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json';
+  var nouvelleDate = {
+    "date": "20200720",
+    "id": "128",
+    "terminee": false
+  }; //axios.post(urlPost, nouvelleDate).then((response) => {});
+};
 
 var afficherVisiteur = function afficherVisiteur() {
   var urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs.json';
 
   _axios.default.get(urlPost).then(function (response) {// console.log(response.data);
   });
-};
+}; // afficherVisiteur();
 
-afficherVisiteur();
 
 var afficherUnVisiteur = function afficherUnVisiteur() {
   var urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs/-MC6dhG-do2hOxQyfH6O.json';
@@ -2016,9 +2185,8 @@ var afficherDate = function afficherDate() {
   _axios.default.get(urlPost).then(function (response) {
     console.log(response.data);
   });
-};
+}; // afficherDate();
 
-afficherDate();
 
 var ajouterUneDate = function ajouterUneDate() {
   var urlPost = 'https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json';
@@ -2044,7 +2212,7 @@ var supprimerLesDates = function supprimerLesDates() {
   _axios.default.delete(urlPost, supprimerLesDates).then(function (response) {// console.log(response.data);
   });
 }; // supprimerLesDates();
-},{"bulma":"../node_modules/bulma/bulma.sass","axios":"../node_modules/axios/index.js","./assets/style.scss":"assets/style.scss"}],"../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"bulma":"../node_modules/bulma/bulma.sass","axios":"../node_modules/axios/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -2072,7 +2240,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64031" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50674" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -2248,5 +2416,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
 //# sourceMappingURL=/src.e31bb0bc.js.map

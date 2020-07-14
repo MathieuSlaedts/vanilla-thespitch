@@ -1966,7 +1966,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // import { Identification } from './partiaux/identification/identification.js';
 // const identification = new Identification();
 // console.log(identification.hello());
-
+var myToday = function myToday() {
+  var myDate = new Date();
+  var myDay = ("0" + myDate.getDate()).slice(-2);
+  var myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
+  return myDate.getFullYear() + '' + myMonth + '' + myDay;
+};
 /*
 *
 *
@@ -1977,6 +1982,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 *
 *
 */
+
+
 var identificationForm = document.querySelector('#identification');
 identificationForm.addEventListener('click', function (ev) {
   return identification(ev);
@@ -1993,7 +2000,9 @@ var identification = function identification(ev) {
     if (response.data[idVisiteur]) {
       console.log(response.data[idVisiteur]);
       var idVisiteurInput = document.querySelector('#visite-visiteur');
+      var idVisiteurInputTest = document.querySelector('#visite-visiteur-test');
       idVisiteurInput.value = idVisiteur;
+      idVisiteurInputTest.textContent = idVisiteur;
     }
   });
 };
@@ -2030,7 +2039,9 @@ var inscription = function inscription(ev) {
   _axios.default.post(urlPost, nouveauVisiteur).then(function (response) {
     console.log(response.data.name);
     var idVisiteurInput = document.querySelector('#visite-visiteur');
+    var idVisiteurInputTest = document.querySelector('#visite-visiteur-test');
     idVisiteurInput.value = response.data.name;
+    idVisiteurInputTest.textContent = response.data.name;
   });
 };
 /*
@@ -2107,7 +2118,7 @@ var objetDeLaVisite = function objetDeLaVisite(ev) {
 
         _axios.default.get(_urlCF + personnelID).then(function (response) {
           var personnelLocal = response.data.acf.local;
-          visiteFormation.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + '</option>';
+          visitePersonnel.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + '</option>';
         });
       });
     });
@@ -2128,19 +2139,25 @@ var entrer = function entrer(ev) {
   ev.preventDefault();
   if (ev.target.tagName !== 'BUTTON') return;
   if (visiteObjet.value !== 'formation' && visiteObjet.value !== 'personnel') return;
+  if (visiteVisiteur.value === '') return;
+  var visiteId = '';
 
   if (visiteObjet.value === 'formation') {
-    console.log(visiteObjet.value, visiteFormation.value);
+    visiteId = visiteFormation.value;
   } else if (visiteObjet.value === 'personnel') {
-    console.log(visiteObjet.value, visitePersonnel.value);
+    visiteId = visitePersonnel.value;
   }
 
-  var urlPost = 'https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json';
+  var idVisiteur = visiteVisiteur.value;
+  var urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs/' + idVisiteur + '/visites.json';
   var nouvelleDate = {
-    "date": "20200720",
-    "id": "128",
+    "date": myToday(),
+    "objet": visiteObjet.value,
+    "id": visiteId,
     "terminee": false
-  }; //axios.post(urlPost, nouvelleDate).then((response) => {});
+  };
+
+  _axios.default.post(urlPost, nouvelleDate).then(function (response) {});
 };
 
 var afficherVisiteur = function afficherVisiteur() {
@@ -2242,7 +2259,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50674" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51049" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

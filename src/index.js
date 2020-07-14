@@ -8,6 +8,14 @@ import axios from 'axios';
 // console.log(identification.hello());
 
 
+const myToday = () => {
+  const myDate = new Date();
+  const myDay = ("0" + myDate.getDate()).slice(-2);
+  const myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
+  return myDate.getFullYear() + '' + myMonth + '' + myDay;
+};
+
+
 
 
 
@@ -37,7 +45,9 @@ const identification = ev => {
     if (response.data[idVisiteur]) {
       console.log(response.data[idVisiteur]);
       const idVisiteurInput = document.querySelector('#visite-visiteur');
+      const idVisiteurInputTest = document.querySelector('#visite-visiteur-test');
       idVisiteurInput.value = idVisiteur;
+      idVisiteurInputTest.textContent = idVisiteur;
     }
   });
 };
@@ -71,7 +81,9 @@ const inscription = ev => {
   axios.post(urlPost, nouveauVisiteur).then((response) => {
     console.log(response.data.name);
     const idVisiteurInput = document.querySelector('#visite-visiteur');
+    const idVisiteurInputTest = document.querySelector('#visite-visiteur-test');
     idVisiteurInput.value = response.data.name;
+    idVisiteurInputTest.textContent = response.data.name;
   });
 };
 
@@ -154,7 +166,7 @@ const objetDeLaVisite = ev => {
         axios.get(urlCF + personnelID).then((response) => {
 
           const personnelLocal = response.data.acf.local;
-          visiteFormation.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + '</option>';
+          visitePersonnel.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + '</option>';
         });
       });
     });
@@ -176,17 +188,23 @@ const entrer = ev => {
   ev.preventDefault();
   if (ev.target.tagName !== 'BUTTON') return;
   if (visiteObjet.value !== 'formation' && visiteObjet.value !== 'personnel') return;
+  if (visiteVisiteur.value === '') return;
 
+  let visiteId = '';
   if (visiteObjet.value === 'formation') {
-    console.log(visiteObjet.value, visiteFormation.value);
+    visiteId = visiteFormation.value;
   }
   else if (visiteObjet.value === 'personnel') {
-    console.log(visiteObjet.value, visitePersonnel.value);
+    visiteId = visitePersonnel.value;
   }
 
-  const urlPost = 'https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json';
-  const nouvelleDate = { "date": "20200720", "id": "128", "terminee": false };
-  //axios.post(urlPost, nouvelleDate).then((response) => {});
+  const idVisiteur = visiteVisiteur.value;
+
+  const urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs/' + idVisiteur + '/visites.json';
+  const nouvelleDate = { "date": myToday(), "objet": visiteObjet.value, "id": visiteId, "terminee": false };
+  axios.post(urlPost, nouvelleDate).then((response) => {
+
+  });
 };
 
 

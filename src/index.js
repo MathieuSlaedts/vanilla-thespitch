@@ -57,7 +57,7 @@ const ajouterUneDate = () => {
     .then((response) => {
       // console.log(response.data);
     });
-}; ajouterUneDate();
+}; //ajouterUneDate();
 
 const supprimerLesDates = () => {
   const urlPost = 'https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json';

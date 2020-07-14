@@ -1992,9 +1992,6 @@ var identification = function identification(ev) {
   _axios.default.get(urlPost).then(function (response) {
     if (response.data[idVisiteur]) {
       console.log(response.data[idVisiteur]);
-
-      var _entrerForm = document.querySelector('#entrer');
-
       var idVisiteurInput = document.querySelector('#visite-visiteur');
       idVisiteurInput.value = idVisiteur;
     }
@@ -2030,7 +2027,11 @@ var inscription = function inscription(ev) {
     "photo": "hello.jpg"
   };
 
-  _axios.default.post(urlPost, nouveauVisiteur).then(function (response) {});
+  _axios.default.post(urlPost, nouveauVisiteur).then(function (response) {
+    console.log(response.data.name);
+    var idVisiteurInput = document.querySelector('#visite-visiteur');
+    idVisiteurInput.value = response.data.name;
+  });
 };
 /*
 *
@@ -2047,6 +2048,7 @@ var entrerForm = document.querySelector('#entrer');
 var visiteObjet = document.querySelector('#visite-objet');
 var visiteFormation = document.querySelector('#visite-formation');
 var visitePersonnel = document.querySelector('#visite-personnel');
+var visiteVisiteur = document.querySelector('#visite-visiteur');
 entrerForm.addEventListener('click', function (ev) {
   return entrer(ev);
 });

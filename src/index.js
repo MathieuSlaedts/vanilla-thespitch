@@ -36,9 +36,7 @@ const identification = ev => {
 
     if (response.data[idVisiteur]) {
       console.log(response.data[idVisiteur]);
-      const entrerForm = document.querySelector('#entrer');
       const idVisiteurInput = document.querySelector('#visite-visiteur');
-
       idVisiteurInput.value = idVisiteur;
     }
   });
@@ -70,7 +68,11 @@ const inscription = ev => {
 
   const urlPost = 'https://ingrwf-08.firebaseio.com/visiteurs.json';
   const nouveauVisiteur = { "nom": visiteurNom, "prenom": visiteurPrenom, "email": visiteurEmail, "photo": "hello.jpg" };
-  axios.post(urlPost, nouveauVisiteur).then((response) => { });
+  axios.post(urlPost, nouveauVisiteur).then((response) => {
+    console.log(response.data.name);
+    const idVisiteurInput = document.querySelector('#visite-visiteur');
+    idVisiteurInput.value = response.data.name;
+  });
 };
 
 
@@ -90,6 +92,7 @@ const entrerForm = document.querySelector('#entrer');
 const visiteObjet = document.querySelector('#visite-objet');
 const visiteFormation = document.querySelector('#visite-formation');
 const visitePersonnel = document.querySelector('#visite-personnel');
+const visiteVisiteur = document.querySelector('#visite-visiteur');
 entrerForm.addEventListener('click', (ev) => entrer(ev));
 visiteObjet.addEventListener('change', (ev) => objetDeLaVisite(ev));
 

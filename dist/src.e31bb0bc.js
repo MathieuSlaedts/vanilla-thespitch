@@ -1969,9 +1969,6 @@ var _axios = _interopRequireDefault(require("axios"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import { Identification } from './partiaux/identification/identification.js';
-// const identification = new Identification();
-// console.log(identification.hello());
 var formatDate = function formatDate(myDate) {
   var myDay = ("0" + myDate.getDate()).slice(-2);
   var myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
@@ -1987,8 +1984,96 @@ var myTodayMinus15 = function myTodayMinus15() {
   var myDate = new Date();
   myDate.setDate(myDate.getDate() - 15);
   return formatDate(myDate);
-}; // console.log(myTodayMinus15());
+};
 
+function isBetween(n, a, b) {
+  return (n - a) * (n - b) <= 0;
+} // console.log(myTodayMinus15());
+
+/*
+ *
+ *
+ *
+ * accueil
+ *
+ *
+ *
+ */
+
+
+var ecranAccueil = document.querySelector("#ecran-accueil");
+var ecranIdentification = document.querySelector("#ecran-identification");
+var ecranInscription = document.querySelector("#ecran-inscription");
+var ecranEntrer = document.querySelector("#ecran-entrer");
+var ecranSortir = document.querySelector("#ecran-sortir");
+var ecranProfil = document.querySelector("#ecran-profil");
+var ecranFin = document.querySelector("#ecran-fin");
+var ecranConfidentialite = document.querySelector("#ecran-confidentialite");
+var ecrans = document.querySelectorAll(".ecran");
+var retour = document.querySelectorAll(".retour");
+var boutonSinscrire = document.querySelectorAll(".bouton-sinscrire a");
+var retourIdentification = document.querySelector(".retour-identification");
+ecranAccueil.addEventListener('click', function (ev) {
+  return accueilHandler(ev);
+});
+retour.forEach(function (el) {
+  el.addEventListener('click', function (ev) {
+    return retourHandler(ev);
+  });
+});
+boutonSinscrire.forEach(function (el) {
+  el.addEventListener('click', function (ev) {
+    return boutonSinscrireHandler(ev);
+  });
+});
+retourIdentification.addEventListener('click', function (ev) {
+  return retourIdentificationHandler(ev);
+});
+
+var accueilHandler = function accueilHandler(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== "A") return;
+  var target = ev.target.dataset.target;
+  document.querySelector(target).classList.remove("is-hidden");
+};
+
+var retourHandler = function retourHandler(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== "A") return;
+  ecrans.forEach(function (element) {
+    if (!element.classList.contains("is-hidden") && element.id !== 'ecran-accueil') {
+      element.classList.add("is-hidden");
+    }
+
+    ;
+  });
+};
+
+var boutonSinscrireHandler = function boutonSinscrireHandler(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== "A") return;
+  ecranInscription.classList.remove("is-hidden");
+};
+
+var retourIdentificationHandler = function retourIdentificationHandler(ev) {
+  ev.preventDefault();
+  if (ev.target.tagName !== "A") return;
+  ecranInscription.classList.add("is-hidden");
+  ecranIdentification.querySelector(".message").innerHTML = '';
+};
+/*
+ *
+ *
+ *
+ * 
+ */
+
+
+var requeteVisiteurs = "https://ingrwf-08.firebaseio.com/visiteurs.json";
+
+var requeteUnVisiteur = function requeteUnVisiteur(idVisiteur) {
+  return "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json";
+};
 /*
  *
  *
@@ -2009,17 +2094,18 @@ identificationForm.addEventListener("click", function (ev) {
 var identification = function identification(ev) {
   ev.preventDefault();
   if (ev.target.tagName !== "BUTTON") return;
-  var urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
   var idVisiteur = identificationForm.querySelector("#id-visiteur").value;
   if (idVisiteur === "") return;
 
-  _axios.default.get(urlPost).then(function (response) {
+  _axios.default.get(requeteVisiteurs).then(function (response) {
     if (response.data[idVisiteur]) {
-      console.log(response.data[idVisiteur]);
       var idVisiteurInput = document.querySelector("#visite-idVisiteur");
       var idVisiteurInputTest = document.querySelector("#visite-idVisiteur-test");
       idVisiteurInput.value = idVisiteur;
       idVisiteurInputTest.textContent = idVisiteur;
+      ecranEntrer.classList.remove("is-hidden");
+    } else {
+      ecranIdentification.querySelector(".message").innerHTML = "<p>Cet identifiant n'est pas correct</p>";
     }
   });
 };
@@ -2059,6 +2145,7 @@ var inscription = function inscription(ev) {
     var idVisiteurInputTest = document.querySelector("#visite-idVisiteur-test");
     idVisiteurInput.value = response.data.name;
     idVisiteurInputTest.textContent = response.data.name;
+    ecranEntrer.classList.remove("is-hidden");
   });
 };
 /*
@@ -2075,7 +2162,9 @@ var inscription = function inscription(ev) {
 var entrerForm = document.querySelector("#entrer");
 var visiteObjet = document.querySelector("#visite-objet");
 var visiteFormation = document.querySelector("#visite-formation");
+var visiteFormationContainer = visiteFormation.closest(".field");
 var visitePersonnel = document.querySelector("#visite-personnel");
+var visitePersonnelContainer = visitePersonnel.closest(".field");
 var visiteVisiteur = document.querySelector("#visite-idVisiteur");
 entrerForm.addEventListener("click", function (ev) {
   return entrer(ev);
@@ -2094,27 +2183,24 @@ var objetDeLaVisite = function objetDeLaVisite(ev) {
 
   if (ev.target.value === "formation") {
     var urlPost = "https://mathieu.go.yo.fr/wp-json/wp/v2/formations";
-    var urlCF = "http://mathieu.go.yo.fr/wp-json/acf/v3/formations/";
 
     _axios.default.get(urlPost).then(function (response) {
       response.data.forEach(function (el) {
         var formationID = el.id;
         var formationTitle = el.title.rendered;
+        var formationLocal = el.acf.local;
+        var formationDebut = el.acf.formations_date_de_debut.split("/").reverse().join("");
+        var formationFin = el.acf.formations_date_de_fin.split("/").reverse().join("");
 
-        _axios.default.get(urlCF + formationID).then(function (response) {
-          var formationLocal = response.data.acf.local;
-          var formationDebut = response.data.acf.formations_date_de_debut.split("/").reverse().join("");
-          var formationFin = response.data.acf.formations_date_de_fin.split("/").reverse().join("");
-          var myDate = new Date();
-          var myDay = ("0" + myDate.getDate()).slice(-2);
-          var myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
-          var today = myDate.getFullYear() + "" + myMonth + "" + myDay;
-
-          if (isBetween(today, formationDebut, formationFin) !== false) {
-            visiteFormation.innerHTML += '<option value="' + formationID + '" data-local="' + formationLocal + '">' + formationTitle + "</option>";
-          }
-        });
+        if (isBetween(myToday(), formationDebut, formationFin) !== false) {
+          visiteFormation.innerHTML += '<option value="' + formationID + '" data-local="' + formationLocal + '">' + formationTitle + "</option>";
+        }
       });
+      visiteFormationContainer.classList.remove("is-hidden");
+
+      if (!visitePersonnelContainer.classList.contains("is-hidden")) {
+        visitePersonnelContainer.classList.add("is-hidden");
+      }
     });
   }
   /*
@@ -2126,25 +2212,22 @@ var objetDeLaVisite = function objetDeLaVisite(ev) {
 
   if (ev.target.value === "personnel") {
     var _urlPost = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel";
-    var _urlCF = "http://mathieu.go.yo.fr/wp-json/acf/v3/membres_personnel/";
 
     _axios.default.get(_urlPost).then(function (response) {
       response.data.forEach(function (el) {
         var personnelID = el.id;
         var personnelTitle = el.title.rendered;
-
-        _axios.default.get(_urlCF + personnelID).then(function (response) {
-          var personnelLocal = response.data.acf.local;
-          visitePersonnel.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + "</option>";
-        });
+        var personnelLocal = el.acf.local;
+        visitePersonnel.innerHTML += '<option value="' + personnelID + '" data-local="' + personnelLocal + '">' + personnelTitle + "</option>";
       });
+      visitePersonnelContainer.classList.remove("is-hidden");
+
+      if (!visiteFormationContainer.classList.contains("is-hidden")) {
+        visiteFormationContainer.classList.add("is-hidden");
+      }
     });
   }
 };
-
-function isBetween(n, a, b) {
-  return (n - a) * (n - b) <= 0;
-}
 /*
  *
  * Entrer
@@ -2156,13 +2239,16 @@ var entrer = function entrer(ev) {
   ev.preventDefault();
   if (ev.target.tagName !== "BUTTON") return;
   if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel") return;
-  if (visiteVisiteur.value === "") return;
-  var visiteId = "";
+  var idVisite = "";
+  var urlVisite = "";
 
   if (visiteObjet.value === "formation") {
-    visiteId = visiteFormation.value;
+    idVisite = visiteFormation.value;
+    urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
+    console.log(ev);
   } else if (visiteObjet.value === "personnel") {
-    visiteId = visitePersonnel.value;
+    idVisite = visitePersonnel.value;
+    urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
   }
 
   var idVisiteur = visiteVisiteur.value;
@@ -2170,11 +2256,35 @@ var entrer = function entrer(ev) {
   var nouvelleDate = {
     date: myToday(),
     objet: visiteObjet.value,
-    id: visiteId,
+    id: idVisite,
     terminee: false
   };
 
-  _axios.default.post(urlPost, nouvelleDate).then(function (response) {});
+  _axios.default.post(urlPost, nouvelleDate).then(function (response) {
+    var requeteVisiteur = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
+
+    _axios.default.all([_axios.default.get(requeteVisiteur), _axios.default.get(urlVisite)]).then(function (response) {
+      var visiteur = response[0].data;
+      var visite = response[1].data;
+      var content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
+      content += "<p>Nom:  " + visiteur.nom + "</p>";
+      content += "<p>Prénom:  " + visiteur.prenom + "</p>";
+      content += "<p>Identifiant: " + idVisiteur + "</p>";
+      content += "<br />";
+
+      if (visite.type === "membres_personnel") {
+        content += "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
+      }
+
+      if (visite.type === "formations") {
+        content += "<p>Vous venez ici pour la formation: " + visite.title.rendered + "</p>";
+      }
+
+      content += "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
+      ecranProfil.querySelector(".profil-datas").innerHTML = content;
+      ecranProfil.classList.remove('is-hidden');
+    });
+  });
 };
 /*
  *
@@ -2185,12 +2295,34 @@ var entrer = function entrer(ev) {
 
 var sortirForm = document.querySelector("#sortir");
 sortirForm.addEventListener("click", function (ev) {
-  return terminerVisiter(ev);
+  return terminerVisite(ev);
 });
 
-var terminerVisiter = function terminerVisiter(ev) {
+var terminerVisite = function terminerVisite(ev) {
   ev.preventDefault();
-  if (ev.target.tagName !== "BUTTON") return; // console.log("je dois récupérer l'id de la visite");
+  if (ev.target.tagName !== "BUTTON") return;
+  var idVisiteur = sortirForm.querySelector("#sortir-id-visiteur").value;
+  if (idVisiteur === "") return;
+  var urlPost = requeteUnVisiteur(idVisiteur);
+
+  _axios.default.get(urlPost).then(function (response) {
+    var visites = response.data;
+
+    if (visites === null) {
+      ecranSortir.querySelector('.message').innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+    }
+
+    for (var visite in visites) {
+      console.log("no");
+
+      var _urlPost2 = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites/" + visite + "/terminee.json";
+
+      _axios.default.put(_urlPost2, true).then(function (response) {
+        ecranFin.classList.remove('is-hidden');
+        setTimeout(window.location.reload.bind(window.location), 3000);
+      });
+    }
+  });
 };
 /*
  *
@@ -2224,11 +2356,11 @@ var supprimerDatePerimee = function supprimerDatePerimee(ev) {
           var visiteDate = visites[visite].date;
 
           if (visiteDate < deadline) {
-            console.log("supprimer cette date: ", "id du visiteur: " + visiteur, "id de la visite: " + visite, "date de la visite: " + visiteDate, "date de la d'ajd: " + deadline); //https://ingrwf-08.firebaseio.com/visiteurs/-MCCiUk6hrVXMEH7zsUd/visites/-MCCiYCOW78w91nbNZsn.json
+            console.log("supprimer cette date: ", "id du visiteur: " + visiteur, "id de la visite: " + visite, "date de la visite: " + visiteDate, "date de la d'ajd: " + deadline);
 
-            var _urlPost2 = "https://ingrwf-08.firebaseio.com/visiteurs/" + visiteur + "/visites/" + visite + ".json";
+            var _urlPost3 = "https://ingrwf-08.firebaseio.com/visiteurs/" + visiteur + "/visites/" + visite + ".json";
 
-            _axios.default.delete(_urlPost2).then(function (response) {// console.log(response.data);
+            _axios.default.delete(_urlPost3).then(function (response) {// console.log(response.data);
             });
           }
         }
@@ -2236,111 +2368,6 @@ var supprimerDatePerimee = function supprimerDatePerimee(ev) {
     }
   });
 };
-/*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-
-var afficherVisiteur = function afficherVisiteur() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-
-  _axios.default.get(urlPost).then(function (response) {// console.log(response.data);
-  });
-}; // afficherVisiteur();
-
-
-var afficherUnVisiteur = function afficherUnVisiteur() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/visiteurs/-MC6dhG-do2hOxQyfH6O.json";
-
-  _axios.default.get(urlPost).then(function (response) {// console.log(response.data);
-  });
-}; // afficherUnVisiteur();
-
-
-var inscrireVisiteur = function inscrireVisiteur() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-  var nouveauVisiteur = {
-    nom: "John",
-    prenom: "Doe",
-    email: "j.doe@gmail.com",
-    photo: "hello.jpg"
-  };
-
-  _axios.default.post(urlPost, nouveauVisiteur).then(function (response) {// console.log(response.data);
-  });
-}; // inscrireVisiteur();
-
-
-var supprimerVisiteur = function supprimerVisiteur() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/visiteurs/-MCBCAeFG7ipRnnbAHQ-.json";
-
-  _axios.default.delete(urlPost).then(function (response) {// console.log(response.data);
-  });
-}; //supprimerVisiteur();
-
-
-var afficherDate = function afficherDate() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-
-  _axios.default.get(urlPost).then(function (response) {
-    console.log(response.data);
-  });
-}; // afficherDate();
-
-
-var ajouterUneDate = function ajouterUneDate() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-  var nouvelleDate = {
-    date: "20200720",
-    id: "128",
-    terminee: false
-  };
-
-  _axios.default.post(urlPost, nouvelleDate).then(function (response) {// console.log(response.data);
-  });
-}; //ajouterUneDate();
-
-
-var supprimerLesDates = function supprimerLesDates() {
-  var urlPost = "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-  var nouvelleDate = {
-    date: "20200720",
-    id: "128",
-    terminee: false
-  };
-
-  _axios.default.delete(urlPost).then(function (response) {// console.log(response.data);
-  });
-}; // supprimerLesDates();
 },{"bulma":"../node_modules/bulma/bulma.sass","./assets/style.scss":"assets/style.scss","axios":"../node_modules/axios/index.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -2369,7 +2396,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59720" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65335" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

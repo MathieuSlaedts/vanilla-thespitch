@@ -9,122 +9,181 @@
 
 <body>
     <div id="thespitch">
-        <div id="accueil">
-    <a href="#identification" class="button accueil__entrer">Enter dans le batiment</a>
-  <a href="#sortir" class="button accueil__sortir">Sortir du batiment</a>
-    <a href="#vie-privee" class="button accueil__vp">Consulter Vie Privée</a>
+        <div id="ecran-accueil" class="ecran">
+  <a href="#ecran-identification" data-target="#ecran-identification" class="button is-large accueil__entrer">Enter
+    dans le batiment</a>
+  <a href="#ecran-sortir" data-target="#ecran-sortir" class="button is-large accueil__sortir">Sortir du batiment</a>
+  <a href="#ecran-confidentialite" data-target="#ecran-confidentialite" class="button is-large accueil__vp">Consulter
+    vie
+    privée</a>
 </div>
-        <div id="identification-wrapper">
-    <h1>Identification</h1>
-    <form id="identification">
-        <p>
-            Vous vous êtes inscrit et êtes entré dans le batiments il y a moins de 15 jours:
-        </p>
-        <div class="field">
-            <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
-            <div class="control">
-                <input class="input" type="text" name="id-visiteur" id="id-visiteur" placeholder="Entrez votre identifiant">
+        <div id="ecran-identification" class="ecran is-hidden">
+    <div>
+        <a href="#" class="retour">Retour à l'accueil</a>
+        <h1>Identification</h1>
+        <form id="identification">
+            <p>
+                Vous vous êtes inscrit et êtes entré dans le batiments il y a moins de 15 jours:
+            </p>
+            <div class="field">
+                <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
+                <div class="control">
+                    <input class="input" type="text" name="id-visiteur" id="id-visiteur" placeholder="Entrez votre identifiant">
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-link">Submit</button>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link">S'identifier</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+        <br>
+        <div class="message"></div>
+        <div class="bouton-sinscrire">
+            <p>Vous n'êtes pas encore inscrit ? <a href="#" class="button">S'incrire</a></p>
 
-    <p>Vous n'êtes pas encore inscrit ?</p>
-    <a href="#" class="button">S'incrire</a>
+        </div>
+    </div>
 </div>
-        <div id="inscription-wrapper">
-    <h1>Inscription</h1>
-    <form id="inscription">
-        <div class="field">
-            <label class="label" for="inscription-nom">Nom:</label>
-            <div class="control">
-                <input class="input" type="text" name="inscription-nom" id="inscription-nom" placeholder="Entrez votre Nom">
+        <div id="ecran-inscription" class="ecran is-hidden">
+    <div>
+        <a href="#" class="retour">Retour à l'accueil</a>
+        <h1>Inscription</h1>
+        <form id="inscription">
+            <div class="field">
+                <label class="label" for="inscription-nom">Nom:</label>
+                <div class="control">
+                    <input class="input" type="text" name="inscription-nom" id="inscription-nom" placeholder="Entrez votre Nom">
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label" for="inscription-prenom">Prénom:</label>
-            <div class="control">
-                <input class="input" type="text" name="inscription-prenom" id="inscription-prenom" placeholder="Entrez votre Prénom">
+            <div class="field">
+                <label class="label" for="inscription-prenom">Prénom:</label>
+                <div class="control">
+                    <input class="input" type="text" name="inscription-prenom" id="inscription-prenom" placeholder="Entrez votre Prénom">
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <label class="label" for="inscription-email">Email:</label>
-            <div class="control">
-                <input class="input" type="text" name="inscription-email" id="inscription-email" placeholder="Entrez votre Prénom">
+            <div class="field">
+                <label class="label" for="inscription-email">Email:</label>
+                <div class="control">
+                    <input class="input" type="text" name="inscription-email" id="inscription-email" placeholder="Entrez votre adresse email">
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-link">Envoyer</button>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-link">S'inscrire</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+        <p><a href="#" class="retour-identification">Retour à l'identification</a></p>
+    </div>
 </div>
         
-        <div id="entrer-wrapper">
-    <h1>Entrer</h1>
-    <form id="entrer">
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-objet">
-            <option value="">Veuillez sélectionner l'objet de votre visite</option>
-            <option value="formation">Suivre une formation</option>
-            <option value="personnel">Rencontrer un membre du personnel</option>
-          </select>
+        <div id="ecran-entrer" class="ecran is-hidden">
+    <div>
+        <a href="#" class="retour">Retour à l'accueil</a>
+        <h1>Entrer</h1>
+        <form id="entrer">
+            <div class="field">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-objet">
+                            <option value="">Veuillez sélectionner l'objet de votre visite</option>
+                            <option value="formation">Suivre une formation</option>
+                            <option value="personnel">Rencontrer un membre du personnel</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-formation">
-            <option value="">Veuillez sélectionner une formation</option>
-          </select>
+            <div class="field is-hidden">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-formation">
+                            <option value="">Veuillez sélectionner une formation</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-personnel">
-            <option value="">Veuillez sélectionner un membre du personnel</option>
-          </select>
+            <div class="field is-hidden">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-personnel">
+                            <option value="">Veuillez sélectionner un membre du personnel</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <input id="visite-idVisiteur" type="hidden" value="">
-                <p id="visite-idVisiteur-test"></p>
-                <button class="button is-link">Envoyer</button>
+            <div class="field">
+                <div class="control">
+                    <input id="visite-idVisiteur" type="hidden" value="">
+                    <p id="visite-idVisiteur-test"></p>
+                    <button class="button is-link">Envoyer</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>
-        <div id="sortir-wrapper">
-    <h1>Sortir</h1>
-    <form id="sortir">
-        <div class="field">
-            <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
-            <div class="control">
-                <input class="input" type="text" name="sortir-id-visiteur" id="sortir-id-visiteur" placeholder="Entrez votre identifiant">
+        <div id="ecran-sortir" class="ecran is-hidden">
+    <div>
+        <a href="#" class="retour">Retour à l'accueil</a>
+        <h1>Sortir</h1>
+        <form id="sortir">
+            <div class="field">
+                <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
+                <div class="control">
+                    <input class="input" type="text" name="sortir-id-visiteur" id="sortir-id-visiteur" placeholder="Entrez votre identifiant">
+                </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <input id="sortir-idVisite" type="hidden" value="">
-                <p id="sortir-idVisite-test"></p>
-                <button class="button is-link">Submit</button>
+            <div class="field">
+                <div class="control">
+                    <input id="sortir-idVisite" type="hidden" value="">
+                    <p id="sortir-idVisite-test"></p>
+                    <button class="button is-link">Sortir</button>
+                </div>
             </div>
+        </form>
+        <br>
+        <div class="message">
         </div>
-    </form>
+    </div>
 </div>
-        
+        <div id="ecran-profil" class="ecran is-hidden">
+  <div>
+    <a href="#" class="retour">Retour à l'accueil</a>
+
+    <div class="profil-datas">
+      <h1>Bonne visite</h1>
+
+      <p>Nom: </p>
+      <p>Prénom: </p>
+      <p>Identifiant: </p>
+      <br>
+      <p>Vous venez ici pour:</p>
+      <p>Veuillez vous rendre au Local:</p>
+    </div>
+  </div>
+</div>
+        <div id="ecran-fin" class="ecran is-hidden">
+  <div>
+    <a href="#" class="retour">Retour à l'accueil</a>
+
+    <div class="profil-datas">
+      <h1>Merdi pour votre visite</h1>
+      <p>A bientot</p>
+    </div>
+  </div>
+</div>
+        <div id="ecran-confidentialite" class="ecran is-hidden">
+  <div>
+    <a href="#" class="retour">Retour à l'accueil</a>
+    <h1>Politique de Confidentialité</h1>
+    <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas.
+      Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam
+      egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et
+      sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet,
+      wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac
+      dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
+  </div>
+</div>
     </div>
     <script src="/src.e31bb0bc.js"></script>
 </body>

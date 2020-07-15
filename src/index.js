@@ -1,11 +1,6 @@
 import "bulma";
 import "./assets/style.scss";
-
 import axios from "axios";
-
-// import { Identification } from './partiaux/identification/identification.js';
-// const identification = new Identification();
-// console.log(identification.hello());
 
 const formatDate = (myDate) => {
     const myDay = ("0" + myDate.getDate()).slice(-2);
@@ -23,7 +18,93 @@ const myTodayMinus15 = () => {
     myDate.setDate(myDate.getDate() - 15);
     return formatDate(myDate);
 };
+
+
+
+function isBetween(n, a, b) {
+    return (n - a) * (n - b) <= 0;
+}
 // console.log(myTodayMinus15());
+
+/*
+ *
+ *
+ *
+ * accueil
+ *
+ *
+ *
+ */
+
+const ecranAccueil = document.querySelector("#ecran-accueil");
+const ecranIdentification = document.querySelector("#ecran-identification");
+const ecranInscription = document.querySelector("#ecran-inscription");
+const ecranEntrer = document.querySelector("#ecran-entrer");
+const ecranSortir = document.querySelector("#ecran-sortir");
+const ecranProfil = document.querySelector("#ecran-profil");
+const ecranFin = document.querySelector("#ecran-fin");
+const ecranConfidentialite = document.querySelector("#ecran-confidentialite");
+
+const ecrans = document.querySelectorAll(".ecran");
+const retour = document.querySelectorAll(".retour");
+const boutonSinscrire = document.querySelectorAll(".bouton-sinscrire a");
+const retourIdentification = document.querySelector(".retour-identification");
+
+ecranAccueil.addEventListener('click', ev => accueilHandler(ev));
+retour.forEach(el => { el.addEventListener('click', ev => retourHandler(ev)) });
+boutonSinscrire.forEach(el => { el.addEventListener('click', ev => boutonSinscrireHandler(ev)) });
+retourIdentification.addEventListener('click', ev => retourIdentificationHandler(ev));
+
+
+const accueilHandler = (ev) => {
+    ev.preventDefault();
+    if (ev.target.tagName !== "A") return;
+
+    const target = ev.target.dataset.target;
+    document.querySelector(target).classList.remove("is-hidden");
+
+};
+
+const retourHandler = (ev) => {
+    ev.preventDefault();
+    if (ev.target.tagName !== "A") return;
+
+    ecrans.forEach(element => {
+        if (!element.classList.contains("is-hidden") && element.id !== 'ecran-accueil') {
+            element.classList.add("is-hidden");
+        };
+    });
+};
+
+const boutonSinscrireHandler = (ev) => {
+    ev.preventDefault();
+    if (ev.target.tagName !== "A") return;
+    ecranInscription.classList.remove("is-hidden");
+};
+
+const retourIdentificationHandler = (ev) => {
+    ev.preventDefault();
+    if (ev.target.tagName !== "A") return;
+    ecranInscription.classList.add("is-hidden");
+    ecranIdentification.querySelector(".message").innerHTML = '';
+};
+
+
+
+
+/*
+ *
+ *
+ *
+ * 
+ */
+const requeteVisiteurs = "https://ingrwf-08.firebaseio.com/visiteurs.json";
+const requeteUnVisiteur = idVisiteur => {
+    return "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json";
+};
+
+
+
 
 /*
  *
@@ -42,19 +123,21 @@ const identification = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
 
-    const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
     const idVisiteur = identificationForm.querySelector("#id-visiteur").value;
     if (idVisiteur === "") return;
 
-    axios.get(urlPost).then((response) => {
+    axios.get(requeteVisiteurs).then((response) => {
         if (response.data[idVisiteur]) {
-            console.log(response.data[idVisiteur]);
             const idVisiteurInput = document.querySelector("#visite-idVisiteur");
             const idVisiteurInputTest = document.querySelector(
                 "#visite-idVisiteur-test"
             );
             idVisiteurInput.value = idVisiteur;
             idVisiteurInputTest.textContent = idVisiteur;
+
+            ecranEntrer.classList.remove("is-hidden");
+        } else {
+            ecranIdentification.querySelector(".message").innerHTML = "<p>Cet identifiant n'est pas correct</p>";
         }
     });
 };
@@ -96,6 +179,7 @@ const inscription = (ev) => {
         );
         idVisiteurInput.value = response.data.name;
         idVisiteurInputTest.textContent = response.data.name;
+        ecranEntrer.classList.remove("is-hidden");
     });
 };
 
@@ -111,7 +195,9 @@ const inscription = (ev) => {
 const entrerForm = document.querySelector("#entrer");
 const visiteObjet = document.querySelector("#visite-objet");
 const visiteFormation = document.querySelector("#visite-formation");
+const visiteFormationContainer = visiteFormation.closest(".field");
 const visitePersonnel = document.querySelector("#visite-personnel");
+const visitePersonnelContainer = visitePersonnel.closest(".field");
 const visiteVisiteur = document.querySelector("#visite-idVisiteur");
 entrerForm.addEventListener("click", (ev) => entrer(ev));
 visiteObjet.addEventListener("change", (ev) => objetDeLaVisite(ev));
@@ -126,40 +212,37 @@ const objetDeLaVisite = (ev) => {
      */
     if (ev.target.value === "formation") {
         const urlPost = "https://mathieu.go.yo.fr/wp-json/wp/v2/formations";
-        const urlCF = "http://mathieu.go.yo.fr/wp-json/acf/v3/formations/";
 
         axios.get(urlPost).then((response) => {
             response.data.forEach((el) => {
                 const formationID = el.id;
                 const formationTitle = el.title.rendered;
+                const formationLocal = el.acf.local;
+                const formationDebut = el.acf.formations_date_de_debut
+                    .split("/")
+                    .reverse()
+                    .join("");
+                const formationFin = el.acf.formations_date_de_fin
+                    .split("/")
+                    .reverse()
+                    .join("");
 
-                axios.get(urlCF + formationID).then((response) => {
-                    const formationLocal = response.data.acf.local;
-                    const formationDebut = response.data.acf.formations_date_de_debut
-                        .split("/")
-                        .reverse()
-                        .join("");
-                    const formationFin = response.data.acf.formations_date_de_fin
-                        .split("/")
-                        .reverse()
-                        .join("");
-                    const myDate = new Date();
-                    const myDay = ("0" + myDate.getDate()).slice(-2);
-                    const myMonth = ("0" + (myDate.getMonth() + 1)).slice(-2);
-                    const today = myDate.getFullYear() + "" + myMonth + "" + myDay;
-
-                    if (isBetween(today, formationDebut, formationFin) !== false) {
-                        visiteFormation.innerHTML +=
-                            '<option value="' +
-                            formationID +
-                            '" data-local="' +
-                            formationLocal +
-                            '">' +
-                            formationTitle +
-                            "</option>";
-                    }
-                });
+                if (isBetween(myToday(), formationDebut, formationFin) !== false) {
+                    visiteFormation.innerHTML +=
+                        '<option value="' +
+                        formationID +
+                        '" data-local="' +
+                        formationLocal +
+                        '">' +
+                        formationTitle +
+                        "</option>";
+                }
             });
+
+            visiteFormationContainer.classList.remove("is-hidden");
+            if (!visitePersonnelContainer.classList.contains("is-hidden")) {
+                visitePersonnelContainer.classList.add("is-hidden");
+            }
         });
     }
 
@@ -170,32 +253,29 @@ const objetDeLaVisite = (ev) => {
      */
     if (ev.target.value === "personnel") {
         const urlPost = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel";
-        const urlCF = "http://mathieu.go.yo.fr/wp-json/acf/v3/membres_personnel/";
 
         axios.get(urlPost).then((response) => {
             response.data.forEach((el) => {
                 const personnelID = el.id;
                 const personnelTitle = el.title.rendered;
-
-                axios.get(urlCF + personnelID).then((response) => {
-                    const personnelLocal = response.data.acf.local;
-                    visitePersonnel.innerHTML +=
-                        '<option value="' +
-                        personnelID +
-                        '" data-local="' +
-                        personnelLocal +
-                        '">' +
-                        personnelTitle +
-                        "</option>";
-                });
+                const personnelLocal = el.acf.local;
+                visitePersonnel.innerHTML +=
+                    '<option value="' +
+                    personnelID +
+                    '" data-local="' +
+                    personnelLocal +
+                    '">' +
+                    personnelTitle +
+                    "</option>";
             });
+
+            visitePersonnelContainer.classList.remove("is-hidden");
+            if (!visiteFormationContainer.classList.contains("is-hidden")) {
+                visiteFormationContainer.classList.add("is-hidden");
+            }
         });
     }
 };
-
-function isBetween(n, a, b) {
-    return (n - a) * (n - b) <= 0;
-}
 
 /*
  *
@@ -206,17 +286,18 @@ function isBetween(n, a, b) {
 const entrer = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
-    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel")
-        return;
-    if (visiteVisiteur.value === "") return;
+    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel") return;
 
-    let visiteId = "";
+    let idVisite = "";
+    let urlVisite = "";
     if (visiteObjet.value === "formation") {
-        visiteId = visiteFormation.value;
+        idVisite = visiteFormation.value;
+        urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
+        console.log(ev);
     } else if (visiteObjet.value === "personnel") {
-        visiteId = visitePersonnel.value;
+        idVisite = visitePersonnel.value;
+        urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
     }
-
     const idVisiteur = visiteVisiteur.value;
 
     const urlPost =
@@ -226,10 +307,37 @@ const entrer = (ev) => {
     const nouvelleDate = {
         date: myToday(),
         objet: visiteObjet.value,
-        id: visiteId,
+        id: idVisite,
         terminee: false,
     };
-    axios.post(urlPost, nouvelleDate).then((response) => {});
+    axios.post(urlPost, nouvelleDate).then((response) => {
+
+        const requeteVisiteur = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
+        axios.all([
+            axios.get(requeteVisiteur),
+            axios.get(urlVisite)
+        ]).then((response) => {
+            const visiteur = response[0].data;
+            const visite = response[1].data;
+
+            let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
+            content += "<p>Nom:  " + visiteur.nom + "</p>";
+            content += "<p>Prénom:  " + visiteur.prenom + "</p>";
+            content += "<p>Identifiant: " + idVisiteur + "</p>";
+            content += "<br />";
+            if (visite.type === "membres_personnel") {
+                content += "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
+            }
+            if (visite.type === "formations") {
+                content += "<p>Vous venez ici pour la formation: " + visite.title.rendered + "</p>";
+            }
+            content += "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
+
+            ecranProfil.querySelector(".profil-datas").innerHTML = content;
+            ecranProfil.classList.remove('is-hidden');
+        });
+
+    });
 };
 
 /*
@@ -237,14 +345,35 @@ const entrer = (ev) => {
  * sortie
  *
  */
-const sortirForm = document.querySelector("#sortir");
-sortirForm.addEventListener("click", (ev) => terminerVisiter(ev));
 
-const terminerVisiter = (ev) => {
+const sortirForm = document.querySelector("#sortir");
+sortirForm.addEventListener("click", (ev) => terminerVisite(ev));
+
+const terminerVisite = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
 
-    // console.log("je dois récupérer l'id de la visite");
+    const idVisiteur = sortirForm.querySelector("#sortir-id-visiteur").value;
+    if (idVisiteur === "") return;
+    const urlPost = requeteUnVisiteur(idVisiteur);
+    axios.get(urlPost).then((response) => {
+        const visites = response.data;
+
+        if (visites === null) {
+            ecranSortir.querySelector('.message').innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+        }
+
+        for (const visite in visites) {
+            console.log("no");
+            const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites/" + visite + "/terminee.json";
+            axios.put(urlPost, true).then((response) => {
+
+                ecranFin.classList.remove('is-hidden');
+                setTimeout(window.location.reload.bind(window.location), 3000);
+
+            });
+        }
+    });
 };
 
 /*
@@ -281,7 +410,6 @@ const supprimerDatePerimee = (ev) => {
                             "date de la visite: " + visiteDate,
                             "date de la d'ajd: " + deadline
                         );
-                        //https://ingrwf-08.firebaseio.com/visiteurs/-MCCiUk6hrVXMEH7zsUd/visites/-MCCiYCOW78w91nbNZsn.json
                         const urlPost =
                             "https://ingrwf-08.firebaseio.com/visiteurs/" +
                             visiteur +
@@ -298,105 +426,3 @@ const supprimerDatePerimee = (ev) => {
         }
     });
 };
-
-/*
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
-
-const afficherVisiteur = () => {
-    const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-
-    axios.get(urlPost).then((response) => {
-        // console.log(response.data);
-    });
-}; // afficherVisiteur();
-
-const afficherUnVisiteur = () => {
-    const urlPost =
-        "https://ingrwf-08.firebaseio.com/visiteurs/-MC6dhG-do2hOxQyfH6O.json";
-
-    axios.get(urlPost).then((response) => {
-        // console.log(response.data);
-    });
-}; // afficherUnVisiteur();
-
-const inscrireVisiteur = () => {
-    const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-    const nouveauVisiteur = {
-        nom: "John",
-        prenom: "Doe",
-        email: "j.doe@gmail.com",
-        photo: "hello.jpg",
-    };
-
-    axios.post(urlPost, nouveauVisiteur).then((response) => {
-        // console.log(response.data);
-    });
-}; // inscrireVisiteur();
-
-const supprimerVisiteur = () => {
-    const urlPost =
-        "https://ingrwf-08.firebaseio.com/visiteurs/-MCBCAeFG7ipRnnbAHQ-.json";
-
-    axios.delete(urlPost).then((response) => {
-        // console.log(response.data);
-    });
-}; //supprimerVisiteur();
-
-const afficherDate = () => {
-    const urlPost =
-        "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-
-    axios.get(urlPost).then((response) => {
-        console.log(response.data);
-    });
-}; // afficherDate();
-
-const ajouterUneDate = () => {
-    const urlPost =
-        "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-    const nouvelleDate = { date: "20200720", id: "128", terminee: false };
-
-    axios.post(urlPost, nouvelleDate).then((response) => {
-        // console.log(response.data);
-    });
-}; //ajouterUneDate();
-
-const supprimerLesDates = () => {
-    const urlPost =
-        "https://ingrwf-08.firebaseio.com/-MC6dhG-do2hOxQyfH6O/visites.json";
-    const nouvelleDate = { date: "20200720", id: "128", terminee: false };
-
-    axios.delete(urlPost).then((response) => {
-        // console.log(response.data);
-    });
-}; // supprimerLesDates();

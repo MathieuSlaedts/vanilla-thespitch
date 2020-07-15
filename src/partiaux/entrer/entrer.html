@@ -1,45 +1,44 @@
-<div id="entrer-wrapper">
-    <h1>Entrer</h1>
-    <form id="entrer">
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-objet">
-            <option value=""
-              >Veuillez sélectionner l'objet de votre visite</option
-            >
-            <option value="formation">Suivre une formation</option>
-            <option value="personnel">Rencontrer un membre du personnel</option>
-          </select>
+<div id="ecran-entrer" class="ecran is-hidden">
+    <div>
+        <a href="#" class="retour">Retour à l'accueil</a>
+        <h1>Entrer</h1>
+        <form id="entrer">
+            <div class="field">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-objet">
+                            <option value="">Veuillez sélectionner l'objet de votre visite</option>
+                            <option value="formation">Suivre une formation</option>
+                            <option value="personnel">Rencontrer un membre du personnel</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-formation">
-            <option value="">Veuillez sélectionner une formation</option>
-          </select>
+            <div class="field is-hidden">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-formation">
+                            <option value="">Veuillez sélectionner une formation</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <div class="select">
-                    <select id="visite-personnel">
-            <option value=""
-              >Veuillez sélectionner un membre du personnel</option
-            >
-          </select>
+            <div class="field is-hidden">
+                <div class="control">
+                    <div class="select">
+                        <select id="visite-personnel">
+                            <option value="">Veuillez sélectionner un membre du personnel</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <input id="visite-idVisiteur" type="hidden" value="" />
-                <p id="visite-idVisiteur-test"></p>
-                <button class="button is-link">Envoyer</button>
+            <div class="field">
+                <div class="control">
+                    <input id="visite-idVisiteur" type="hidden" value="" />
+                    <p id="visite-idVisiteur-test"></p>
+                    <button class="button is-link">Envoyer</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
 </div>

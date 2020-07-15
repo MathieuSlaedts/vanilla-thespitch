@@ -1,1 +1,48 @@
-// body { background: red; }
+body {
+    //background: red;
+}
+
+#thespitch>div {
+    padding: 10rem;
+    border: 1px solid #ccc;
+}
+
+
+/* html,
+body,
+#thespitch {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+#accueil {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    >a {
+        margin: 1rem;
+    }
+}
+
+#thespitch>div {
+    width: 100%;
+    height: 100%;
+    background: white;
+}
+
+#identification-wrapper {
+    display: none;
+}
+
+#inscription-wrapper {
+    display: none;
+}
+
+#entrer-wrapper {
+    display: none;
+}
+
+#sortir-wrapper {
+    display: none;
+} */

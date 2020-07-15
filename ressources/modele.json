@@ -1,0 +1,62 @@
+{
+    "-MC6dhG-do2hOxQyfH6O": {
+        "email": "mathieu.slaedts@gmail.com",
+        "nom": "Mathieu",
+        "photo": "https://mathieu-slaedts.be/assets/images/hello.jpg",
+        "prenom": "Slaedts",
+        "visites": {
+            "-MC6mOZVz-MrTZhEfs1v": {
+                "date": "20200713",
+                "id": "28",
+                "objet": "personnel",
+                "terminee": true
+            },
+            "-MCD8OxLNBgU_rj0r-9J": {
+                "date": "20200714",
+                "id": "20",
+                "objet": "formation",
+                "terminee": true
+            }
+        }
+    },
+    "-MC6dhG-do2hOxQyfH25": {
+        "email": "john.doe@gmail.com",
+        "nom": "John",
+        "photo": "https://mathieu-slaedts.be/assets/images/hello.jpg",
+        "prenom": "Doe",
+        "visites": {
+            "-MC6mOZVz-MrTZhEfs1v": {
+                "date": "20200620",
+                "id": "28",
+                "objet": "personnel",
+                "terminee": true
+            },
+            "-MCD8OxLNBgU_rj0r-9J": {
+                "date": "20200715",
+                "id": "20",
+                "objet": "formation",
+                "terminee": false
+            }
+        }
+    },
+    "-MC6dhG-do2hOxQyfH18": {
+        "email": "jane.done@gmail.com",
+        "nom": "Jane",
+        "photo": "https://mathieu-slaedts.be/assets/images/hello.jpg",
+        "prenom": "Done",
+        "visites": {
+            "-MC6mOZVz-MrTZhEfs1v": {
+                "date": "20200515",
+                "id": "20",
+                "objet": "formation",
+                "terminee": true
+            },
+            "-MCD8OxLNBgU_rj0r-9J": {
+                "date": "20200715",
+                "id": "28",
+                "objet": "personnel",
+                "terminee": false
+            }
+        }
+    }
+}

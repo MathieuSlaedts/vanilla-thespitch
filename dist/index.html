@@ -2,128 +2,131 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Spitch</title>
-  <link rel="stylesheet" href="/style.cd660723.css">
-<script src="/style.cd660723.js"></script><link rel="stylesheet" href="/src.e31bb0bc.css"></head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spitch</title>
+<link rel="stylesheet" href="/src.e31bb0bc.css"></head>
 
 <body>
-  <div id="thespitch">
-    <div class="accueil">
-  <a href="#identification" class="button accueil__entrer">Enter dans le batiment</a>
+    <div id="thespitch">
+        <div id="accueil">
+    <a href="#identification" class="button accueil__entrer">Enter dans le batiment</a>
   <a href="#sortir" class="button accueil__sortir">Sortir du batiment</a>
-  <a href="#vie-privee" class="button accueil__vp">Consulter Vie Privée</a>
+    <a href="#vie-privee" class="button accueil__vp">Consulter Vie Privée</a>
 </div>
-    <div>
-  <h1>Identification</h1>
-  <form id="identification">
-    <p>Vous vous êtes inscrit et êtes entré dans le batiments il y a moins de 15 jours:</p>
-    <div class="field">
-      <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
-      <div class="control">
-        <input class="input" type="text" name="id-visiteur" id="id-visiteur" placeholder="Entrez votre identifiant">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link">Submit</button>
-      </div>
-    </div>
-  </form>
+        <div id="identification-wrapper">
+    <h1>Identification</h1>
+    <form id="identification">
+        <p>
+            Vous vous êtes inscrit et êtes entré dans le batiments il y a moins de 15 jours:
+        </p>
+        <div class="field">
+            <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
+            <div class="control">
+                <input class="input" type="text" name="id-visiteur" id="id-visiteur" placeholder="Entrez votre identifiant">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button class="button is-link">Submit</button>
+            </div>
+        </div>
+    </form>
 
-  <p>Vous n'êtes pas encore inscrit ?</p>
-  <a href="#" class="button">S'incrire</a>
+    <p>Vous n'êtes pas encore inscrit ?</p>
+    <a href="#" class="button">S'incrire</a>
 </div>
-    <div>
-  <h1>Inscription</h1>
-  <form id="inscription">
-    <div class="field">
-      <label class="label" for="inscription-nom">Nom:</label>
-      <div class="control">
-        <input class="input" type="text" name="inscription-nom" id="inscription-nom" placeholder="Entrez votre Nom">
-      </div>
-    </div>
-    <div class="field">
-      <label class="label" for="inscription-prenom">Prénom:</label>
-      <div class="control">
-        <input class="input" type="text" name="inscription-prenom" id="inscription-prenom" placeholder="Entrez votre Prénom">
-      </div>
-    </div>
-    <div class="field">
-      <label class="label" for="inscription-email">Email:</label>
-      <div class="control">
-        <input class="input" type="text" name="inscription-email" id="inscription-email" placeholder="Entrez votre Prénom">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link">Envoyer</button>
-      </div>
-    </div>
-  </form>
+        <div id="inscription-wrapper">
+    <h1>Inscription</h1>
+    <form id="inscription">
+        <div class="field">
+            <label class="label" for="inscription-nom">Nom:</label>
+            <div class="control">
+                <input class="input" type="text" name="inscription-nom" id="inscription-nom" placeholder="Entrez votre Nom">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="inscription-prenom">Prénom:</label>
+            <div class="control">
+                <input class="input" type="text" name="inscription-prenom" id="inscription-prenom" placeholder="Entrez votre Prénom">
+            </div>
+        </div>
+        <div class="field">
+            <label class="label" for="inscription-email">Email:</label>
+            <div class="control">
+                <input class="input" type="text" name="inscription-email" id="inscription-email" placeholder="Entrez votre Prénom">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <button class="button is-link">Envoyer</button>
+            </div>
+        </div>
+    </form>
 </div>
-    
-    <div>
-  <h1>Entrer</h1>
-  <form id="entrer">
-    <div class="field">
-      <div class="control">
-        <div class="select">
-          <select id="visite-objet">
+        
+        <div id="entrer-wrapper">
+    <h1>Entrer</h1>
+    <form id="entrer">
+        <div class="field">
+            <div class="control">
+                <div class="select">
+                    <select id="visite-objet">
             <option value="">Veuillez sélectionner l'objet de votre visite</option>
             <option value="formation">Suivre une formation</option>
             <option value="personnel">Rencontrer un membre du personnel</option>
           </select>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <div class="select">
-          <select id="visite-formation">
+        <div class="field">
+            <div class="control">
+                <div class="select">
+                    <select id="visite-formation">
             <option value="">Veuillez sélectionner une formation</option>
           </select>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <div class="select">
-          <select id="visite-personnel">
+        <div class="field">
+            <div class="control">
+                <div class="select">
+                    <select id="visite-personnel">
             <option value="">Veuillez sélectionner un membre du personnel</option>
           </select>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <input id="visite-visiteur" type="hidden" value="">
-        <p id="visite-visiteur-test"></p>
-        <button class="button is-link">Envoyer</button>
-      </div>
-    </div>
-  </form>
+        <div class="field">
+            <div class="control">
+                <input id="visite-idVisiteur" type="hidden" value="">
+                <p id="visite-idVisiteur-test"></p>
+                <button class="button is-link">Envoyer</button>
+            </div>
+        </div>
+    </form>
 </div>
-    <div>
-  <h1>Sortir</h1>
-  <form id="sortir">
-    <div class="field">
-      <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
-      <div class="control">
-        <input class="input" type="text" name="sortir-id-visiteur" id="sortir-id-visiteur" placeholder="Entrez votre identifiant">
-      </div>
-    </div>
-    <div class="field">
-      <div class="control">
-        <button class="button is-link">Submit</button>
-      </div>
-    </div>
-  </form>
+        <div id="sortir-wrapper">
+    <h1>Sortir</h1>
+    <form id="sortir">
+        <div class="field">
+            <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
+            <div class="control">
+                <input class="input" type="text" name="sortir-id-visiteur" id="sortir-id-visiteur" placeholder="Entrez votre identifiant">
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input id="sortir-idVisite" type="hidden" value="">
+                <p id="sortir-idVisite-test"></p>
+                <button class="button is-link">Submit</button>
+            </div>
+        </div>
+    </form>
 </div>
-    
-  </div>
-  <script src="/src.e31bb0bc.js"></script>
+        
+    </div>
+    <script src="/src.e31bb0bc.js"></script>
 </body>
 
 </html>

@@ -40,8 +40,9 @@
         <br>
         <div class="message"></div>
         <div class="bouton-sinscrire">
-            <p>Vous n'êtes pas encore inscrit ? <a href="#" class="button">S'incrire</a></p>
-
+            <div class="box">
+                <p>Vous n'êtes pas encore inscrit ? <a href="#" class="button">S'incrire</a></p>
+            </div>
         </div>
     </div>
 </div>
@@ -49,6 +50,11 @@
     <div>
         <a href="#" class="retour">Retour à l'accueil</a>
         <h1>Inscription</h1>
+        <div id="my_camera"></div>
+        <form>
+            <input type="button" value="Take Snapshot" onClick="take_snapshot()">
+        </form>
+        <div id="results">Your captured image will appear here...</div>
         <form id="inscription">
             <div class="field">
                 <label class="label" for="inscription-nom">Nom:</label>
@@ -151,14 +157,6 @@
     <a href="#" class="retour">Retour à l'accueil</a>
 
     <div class="profil-datas">
-      <h1>Bonne visite</h1>
-
-      <p>Nom: </p>
-      <p>Prénom: </p>
-      <p>Identifiant: </p>
-      <br>
-      <p>Vous venez ici pour:</p>
-      <p>Veuillez vous rendre au Local:</p>
     </div>
   </div>
 </div>

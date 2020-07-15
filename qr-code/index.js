@@ -1,6 +1,5 @@
 import "bulma";
 import "./assets/style.scss";
-import './webcam.min.js';
 import axios from "axios";
 
 const formatDate = (myDate) => {
@@ -20,9 +19,12 @@ const myTodayMinus15 = () => {
     return formatDate(myDate);
 };
 
-const isBetween = (n, a, b) => {
+
+
+function isBetween(n, a, b) {
     return (n - a) * (n - b) <= 0;
 }
+// console.log(myTodayMinus15());
 
 /*
  *
@@ -109,6 +111,7 @@ const requeteUnVisiteur = idVisiteur => {
  *
  *
  * Identification
+ * -MC6dhG-do2hOxQyfH6O
  *
  *
  *
@@ -155,37 +158,30 @@ const inscription = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
 
+    const visiteurNom = inscriptionForm.querySelector("#inscription-nom").value;
+    const visiteurPrenom = inscriptionForm.querySelector("#inscription-prenom")
+        .value;
+    const visiteurEmail = inscriptionForm.querySelector("#inscription-email")
+        .value;
+
+    const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs.json";
     const nouveauVisiteur = {
-        nom: inscriptionForm.querySelector("#inscription-nom").value,
-        prenom: inscriptionForm.querySelector("#inscription-prenom").value,
-        email: inscriptionForm.querySelector("#inscription-email").value,
+        nom: visiteurNom,
+        prenom: visiteurPrenom,
+        email: visiteurEmail,
         photo: "hello.jpg",
     };
-    axios.post(requeteVisiteurs, nouveauVisiteur).then((response) => {
-
+    axios.post(urlPost, nouveauVisiteur).then((response) => {
+        console.log(response.data.name);
         const idVisiteurInput = document.querySelector("#visite-idVisiteur");
-        const idVisiteurInputTest = document.querySelector("#visite-idVisiteur-test");
+        const idVisiteurInputTest = document.querySelector(
+            "#visite-idVisiteur-test"
+        );
         idVisiteurInput.value = response.data.name;
         idVisiteurInputTest.textContent = response.data.name;
-
         ecranEntrer.classList.remove("is-hidden");
     });
 };
-
-Webcam.set({
-    width: 320,
-    height: 240,
-    image_format: 'jpeg',
-    jpeg_quality: 90
-});
-Webcam.attach('#my_camera');
-function take_snapshot() {
-    Webcam.snap(function (data_uri) {
-        document.getElementById('results').innerHTML =
-            '<h2>Here is your image:</h2>' +
-            '<img src="' + data_uri + '"/>';
-    });
-}
 
 /*
  *

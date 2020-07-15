@@ -1,7 +1,9 @@
 import "bulma";
 import "./assets/style.scss";
-import './webcam.min.js';
+//import "./assets/qrcode.min.js";
+import "regenerator-runtime/runtime";
 import axios from "axios";
+import QRCode from "qrcode";
 
 const formatDate = (myDate) => {
     const myDay = ("0" + myDate.getDate()).slice(-2);
@@ -22,7 +24,7 @@ const myTodayMinus15 = () => {
 
 const isBetween = (n, a, b) => {
     return (n - a) * (n - b) <= 0;
-}
+};
 
 /*
  *
@@ -33,26 +35,26 @@ const isBetween = (n, a, b) => {
  *
  *
  */
-
+const ecrans = document.querySelectorAll(".ecran");
 const ecranAccueil = document.querySelector("#ecran-accueil");
-const ecranIdentification = document.querySelector("#ecran-identification");
-const ecranInscription = document.querySelector("#ecran-inscription");
-const ecranEntrer = document.querySelector("#ecran-entrer");
-const ecranSortir = document.querySelector("#ecran-sortir");
 const ecranProfil = document.querySelector("#ecran-profil");
 const ecranFin = document.querySelector("#ecran-fin");
 const ecranConfidentialite = document.querySelector("#ecran-confidentialite");
 
-const ecrans = document.querySelectorAll(".ecran");
 const retour = document.querySelectorAll(".retour");
 const boutonSinscrire = document.querySelectorAll(".bouton-sinscrire a");
 const retourIdentification = document.querySelector(".retour-identification");
 
-ecranAccueil.addEventListener('click', ev => accueilHandler(ev));
-retour.forEach(el => { el.addEventListener('click', ev => retourHandler(ev)) });
-boutonSinscrire.forEach(el => { el.addEventListener('click', ev => boutonSinscrireHandler(ev)) });
-retourIdentification.addEventListener('click', ev => retourIdentificationHandler(ev));
-
+ecranAccueil.addEventListener("click", (ev) => accueilHandler(ev));
+retour.forEach((el) => {
+    el.addEventListener("click", (ev) => retourHandler(ev));
+});
+boutonSinscrire.forEach((el) => {
+    el.addEventListener("click", (ev) => boutonSinscrireHandler(ev));
+});
+retourIdentification.addEventListener("click", (ev) =>
+    retourIdentificationHandler(ev)
+);
 
 const accueilHandler = (ev) => {
     ev.preventDefault();
@@ -60,60 +62,97 @@ const accueilHandler = (ev) => {
 
     const target = ev.target.dataset.target;
     document.querySelector(target).classList.remove("is-hidden");
-
 };
 
 const retourHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A") return;
 
-    ecrans.forEach(element => {
-        if (!element.classList.contains("is-hidden") && element.id !== 'ecran-accueil') {
+    ecrans.forEach((element) => {
+        if (!element.classList.contains("is-hidden") &&
+            element.id !== "ecran-accueil"
+        ) {
             element.classList.add("is-hidden");
-        };
+        }
     });
+    resetValues();
 };
 
 const boutonSinscrireHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A") return;
-    ecranInscription.classList.remove("is-hidden");
+    inscriptionEcran.classList.remove("is-hidden");
+
+    const video = document.querySelector("video");
+    const screenshotButton = document.querySelector("#screenshot-button");
+    const img = document.querySelector("#screenshot-img");
+    const canvas = document.createElement("canvas");
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+        video.srcObject = stream;
+    });
+
+    screenshotButton.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext("2d").drawImage(video, 0, 0);
+        img.src = canvas.toDataURL("image/webp");
+        img.classList.remove("is-hidden");
+        //console.log(canvas.toDataURL("image/webp"));
+    });
 };
 
 const retourIdentificationHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A") return;
-    ecranInscription.classList.add("is-hidden");
-    ecranIdentification.querySelector(".message").innerHTML = '';
+    inscriptionEcran.classList.add("is-hidden");
+    IdentificationEcran.querySelector(".message").innerHTML = "";
+    resetValues();
 };
-
-
-
 
 /*
  *
  *
  *
- * 
+ *
  */
-const requeteVisiteurs = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-const requeteUnVisiteur = idVisiteur => {
-    return "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json";
+const requeteFirebase = "https://ingrwf-08.firebaseio.com/visiteurs";
+const requeteWordpress = "http://mathieu.go.yo.fr/wp-json/wp/v2/";
+
+const requeteVisiteurs = requeteFirebase + ".json";
+const requeteFormations = requeteWordpress + "formations";
+const requetePersonnels = requeteWordpress + "membres_personnel";
+
+const requeteUnVisiteur = (idVisiteur) => {
+    return (
+        "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json"
+    );
 };
 
-
-
+const requeteUneDateTerminee = (idVisiteur, idVisite) => {
+    return (
+        requeteFirebase +
+        "/" +
+        idVisiteur +
+        "/visites/" +
+        idVisite +
+        "/terminee.json"
+    );
+};
 
 /*
- *
  *
  *
  * Identification
  *
  *
- *
  */
-const identificationForm = document.querySelector("#identification");
+
+const IdentificationEcran = document.querySelector("#ecran-identification");
+const identificationForm = IdentificationEcran.querySelector("#identification");
+const identificationInput = document.querySelector("#visite-visiteur");
+const identificationMessage = IdentificationEcran.querySelector(".message");
 identificationForm.addEventListener("click", (ev) => identification(ev));
 
 const identification = (ev) => {
@@ -121,33 +160,38 @@ const identification = (ev) => {
     if (ev.target.tagName !== "BUTTON") return;
 
     const idVisiteur = identificationForm.querySelector("#id-visiteur").value;
-    if (idVisiteur === "") return;
+    if (idVisiteur === "") {
+        identificationMessage.innerHTML = "<p>Vous devez entrer un identifant</p>";
+        return;
+    }
 
-    axios.get(requeteVisiteurs).then((response) => {
-        if (response.data[idVisiteur]) {
-            const idVisiteurInput = document.querySelector("#visite-idVisiteur");
-            const idVisiteurInputTest = document.querySelector(
-                "#visite-idVisiteur-test"
-            );
-            idVisiteurInput.value = idVisiteur;
-            idVisiteurInputTest.textContent = idVisiteur;
+    const requeteIdentification = async() => {
+        try {
+            const response = await axios.get(requeteVisiteurs);
+            if (response.data[idVisiteur]) {
+                identificationInput.value = idVisiteur;
+                console.log(idVisiteur);
 
-            ecranEntrer.classList.remove("is-hidden");
-        } else {
-            ecranIdentification.querySelector(".message").innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+                entrerEcran.classList.remove("is-hidden");
+            } else {
+                identificationMessage.innerHTML =
+                    "<p>Cet identifiant n'est pas correct</p>";
+            }
+        } catch (err) {
+            console.error(err);
         }
-    });
+    };
+    requeteIdentification();
 };
 
 /*
  *
  *
- *
  * Inscription
  *
  *
- *
  */
+const inscriptionEcran = document.querySelector("#ecran-inscription");
 const inscriptionForm = document.querySelector("#inscription");
 inscriptionForm.addEventListener("click", (ev) => inscription(ev));
 
@@ -159,125 +203,127 @@ const inscription = (ev) => {
         nom: inscriptionForm.querySelector("#inscription-nom").value,
         prenom: inscriptionForm.querySelector("#inscription-prenom").value,
         email: inscriptionForm.querySelector("#inscription-email").value,
-        photo: "hello.jpg",
+        photo: document.querySelector("#screenshot-img").src,
     };
-    axios.post(requeteVisiteurs, nouveauVisiteur).then((response) => {
+    const requeteInscription = async() => {
+        try {
+            const response = await axios.post(requeteVisiteurs, nouveauVisiteur);
+            if (response.data) {
+                const idVisiteur = response.data.name;
+                const idVisiteurInput = document.querySelector("#visite-visiteur");
+                idVisiteurInput.value = idVisiteur;
+                console.log(idVisiteur);
 
-        const idVisiteurInput = document.querySelector("#visite-idVisiteur");
-        const idVisiteurInputTest = document.querySelector("#visite-idVisiteur-test");
-        idVisiteurInput.value = response.data.name;
-        idVisiteurInputTest.textContent = response.data.name;
-
-        ecranEntrer.classList.remove("is-hidden");
-    });
+                entrerEcran.classList.remove("is-hidden");
+            } else {
+                // Aucune donnee
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    requeteInscription();
 };
-
-Webcam.set({
-    width: 320,
-    height: 240,
-    image_format: 'jpeg',
-    jpeg_quality: 90
-});
-Webcam.attach('#my_camera');
-function take_snapshot() {
-    Webcam.snap(function (data_uri) {
-        document.getElementById('results').innerHTML =
-            '<h2>Here is your image:</h2>' +
-            '<img src="' + data_uri + '"/>';
-    });
-}
 
 /*
  *
  *
- *
- * Entrer
- *
+ * Forumulaire Options de visites
  *
  *
  */
-const entrerForm = document.querySelector("#entrer");
 const visiteObjet = document.querySelector("#visite-objet");
 const visiteFormation = document.querySelector("#visite-formation");
 const visiteFormationContainer = visiteFormation.closest(".field");
 const visitePersonnel = document.querySelector("#visite-personnel");
 const visitePersonnelContainer = visitePersonnel.closest(".field");
-const visiteVisiteur = document.querySelector("#visite-idVisiteur");
-entrerForm.addEventListener("click", (ev) => entrer(ev));
+const visiteVisiteur = document.querySelector("#visite-visiteur");
 visiteObjet.addEventListener("change", (ev) => objetDeLaVisite(ev));
 
 const objetDeLaVisite = (ev) => {
     ev.preventDefault();
 
-    /*
-     *
-     * Formation
-     *
-     */
+    /* Formation */
     if (ev.target.value === "formation") {
-        const urlPost = "https://mathieu.go.yo.fr/wp-json/wp/v2/formations";
+        const requeteFormationsS = async() => {
+            try {
+                const response = await axios.get(requeteFormations);
+                if (response.data) {
+                    response.data.forEach((el) => {
+                        const formationID = el.id;
+                        const formationTitle = el.title.rendered;
+                        const formationLocal = el.acf.local;
+                        const formationDebut = el.acf.formations_date_de_debut
+                            .split("/")
+                            .reverse()
+                            .join("");
+                        const formationFin = el.acf.formations_date_de_fin
+                            .split("/")
+                            .reverse()
+                            .join("");
 
-        axios.get(urlPost).then((response) => {
-            response.data.forEach((el) => {
-                const formationID = el.id;
-                const formationTitle = el.title.rendered;
-                const formationLocal = el.acf.local;
-                const formationDebut = el.acf.formations_date_de_debut
-                    .split("/")
-                    .reverse()
-                    .join("");
-                const formationFin = el.acf.formations_date_de_fin
-                    .split("/")
-                    .reverse()
-                    .join("");
-
-                if (isBetween(myToday(), formationDebut, formationFin) !== false) {
-                    visiteFormation.innerHTML +=
-                        '<option value="' +
-                        formationID +
-                        '" data-local="' +
-                        formationLocal +
-                        '">' +
-                        formationTitle +
-                        "</option>";
+                        if (isBetween(myToday(), formationDebut, formationFin) !== false) {
+                            visiteFormation.innerHTML +=
+                                '<option value="' +
+                                formationID +
+                                '" data-local="' +
+                                formationLocal +
+                                '">' +
+                                formationTitle +
+                                "</option>";
+                        }
+                    });
+                    visiteFormationContainer.classList.remove("is-hidden");
+                    if (!visitePersonnelContainer.classList.contains("is-hidden")) {
+                        visitePersonnelContainer.classList.add("is-hidden");
+                    }
+                } else {
+                    // Aucune donnee
+                    entrerForm.innerHTML =
+                        "<p>Il n'y a aucune formation en ce moment</p>";
                 }
-            });
-
-            visiteFormationContainer.classList.remove("is-hidden");
-            if (!visitePersonnelContainer.classList.contains("is-hidden")) {
-                visitePersonnelContainer.classList.add("is-hidden");
+            } catch (err) {
+                console.error(err);
             }
-        });
+        };
+        requeteFormationsS();
+        axios.get(requeteFormations).then((response) => {});
     }
 
-    /*
-     *
-     * Personnel
-     *
-     */
+    /* Personnel */
     if (ev.target.value === "personnel") {
-        const urlPost = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel";
+        const requetePersonnelS = async() => {
+            try {
+                const response = await axios.get(requetePersonnels);
+                if (response.data) {
+                    response.data.forEach((el) => {
+                        const personnelID = el.id;
+                        const personnelTitle = el.title.rendered;
+                        const personnelLocal = el.acf.local;
+                        visitePersonnel.innerHTML +=
+                            '<option value="' +
+                            personnelID +
+                            '" data-local="' +
+                            personnelLocal +
+                            '">' +
+                            personnelTitle +
+                            "</option>";
+                    });
 
-        axios.get(urlPost).then((response) => {
-            response.data.forEach((el) => {
-                const personnelID = el.id;
-                const personnelTitle = el.title.rendered;
-                const personnelLocal = el.acf.local;
-                visitePersonnel.innerHTML +=
-                    '<option value="' +
-                    personnelID +
-                    '" data-local="' +
-                    personnelLocal +
-                    '">' +
-                    personnelTitle +
-                    "</option>";
-            });
-
-            visitePersonnelContainer.classList.remove("is-hidden");
-            if (!visiteFormationContainer.classList.contains("is-hidden")) {
-                visiteFormationContainer.classList.add("is-hidden");
+                    visitePersonnelContainer.classList.remove("is-hidden");
+                    if (!visiteFormationContainer.classList.contains("is-hidden")) {
+                        visiteFormationContainer.classList.add("is-hidden");
+                    }
+                } else {
+                    // Aucune donnee
+                    entrerForm.innerHTML = "<p>Il n'y a aucun membre du personnel</p>";
+                }
+            } catch (err) {
+                console.error(err);
             }
-        });
+        };
+        requetePersonnelS();
+        axios.get(requetePersonnels).then((response) => {});
     }
 };
 
@@ -286,11 +332,16 @@ const objetDeLaVisite = (ev) => {
  * Entrer
  *
  */
+const entrerEcran = document.querySelector("#ecran-entrer");
+const entrerForm = document.querySelector("#entrer");
+const entrerMessage = entrerEcran.querySelector(".message");
+entrerForm.addEventListener("click", (ev) => entrer(ev));
 
 const entrer = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
-    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel") return;
+    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel")
+        return;
 
     let idVisite = "";
     let urlVisite = "";
@@ -300,7 +351,8 @@ const entrer = (ev) => {
         console.log(ev);
     } else if (visiteObjet.value === "personnel") {
         idVisite = visitePersonnel.value;
-        urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
+        urlVisite =
+            "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
     }
     const idVisiteur = visiteVisiteur.value;
 
@@ -315,42 +367,64 @@ const entrer = (ev) => {
         terminee: false,
     };
     axios.post(urlPost, nouvelleDate).then((response) => {
+        const requeteVisiteur =
+            "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
+        axios
+            .all([axios.get(requeteVisiteur), axios.get(urlVisite)])
+            .then((response) => {
+                const visiteur = response[0].data;
+                const visite = response[1].data;
 
-        const requeteVisiteur = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
-        axios.all([
-            axios.get(requeteVisiteur),
-            axios.get(urlVisite)
-        ]).then((response) => {
-            const visiteur = response[0].data;
-            const visite = response[1].data;
+                let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
+                content += "<div class='img-container'>";
+                const generateQR = async(text) => {
+                    try {
+                        qrCode = await QRCode.toDataURL(text, {}, function(err, url) {
+                            content += "<img src=" + url + " />";
+                            //console.log(url);
+                        });
+                    } catch (err) {
+                        //console.error(err);
+                    }
+                };
+                generateQR(idVisiteur);
 
-            let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
-            content += "<p>Nom:  " + visiteur.nom + "</p>";
-            content += "<p>Prénom:  " + visiteur.prenom + "</p>";
-            content += "<p>Identifiant: " + idVisiteur + "</p>";
-            content += "<br />";
-            if (visite.type === "membres_personnel") {
-                content += "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
-            }
-            if (visite.type === "formations") {
-                content += "<p>Vous venez ici pour la formation: " + visite.title.rendered + "</p>";
-            }
-            content += "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
+                content += "<img src=" + visiteur.photo + " />";
 
-            ecranProfil.querySelector(".profil-datas").innerHTML = content;
-            ecranProfil.classList.remove('is-hidden');
-        });
+                content += "</div>";
 
+                content += "<p>Nom:  " + visiteur.nom + "</p>";
+                content += "<p>Prénom:  " + visiteur.prenom + "</p>";
+                content += "<p>Identifiant: " + idVisiteur + "</p>";
+                content += "<br />";
+                if (visite.type === "membres_personnel") {
+                    content +=
+                        "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
+                }
+                if (visite.type === "formations") {
+                    content +=
+                        "<p>Vous venez ici pour la formation: " +
+                        visite.title.rendered +
+                        "</p>";
+                }
+                content +=
+                    "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
+
+                ecranProfil.querySelector(".profil-datas").innerHTML = content;
+                ecranProfil.classList.remove("is-hidden");
+            });
     });
 };
 
 /*
  *
- * sortie
+ * sortir
+ * Last visite vas permettre de modifier uniquement la visite actuelle
  *
  */
-
+const sortirEcran = document.querySelector("#ecran-sortir");
 const sortirForm = document.querySelector("#sortir");
+const sortirMessage = sortirEcran.querySelector(".message");
 sortirForm.addEventListener("click", (ev) => terminerVisite(ev));
 
 const terminerVisite = (ev) => {
@@ -358,26 +432,45 @@ const terminerVisite = (ev) => {
     if (ev.target.tagName !== "BUTTON") return;
 
     const idVisiteur = sortirForm.querySelector("#sortir-id-visiteur").value;
-    if (idVisiteur === "") return;
-    const urlPost = requeteUnVisiteur(idVisiteur);
-    axios.get(urlPost).then((response) => {
-        const visites = response.data;
+    if (idVisiteur === "") {
+        identificationMessage.innerHTML = "<p>Vous devez entrer un identifant</p>";
+        return;
+    }
 
-        if (visites === null) {
-            ecranSortir.querySelector('.message').innerHTML = "<p>Cet identifiant n'est pas correct</p>";
-        }
-
-        for (const visite in visites) {
-            console.log("no");
-            const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites/" + visite + "/terminee.json";
-            axios.put(urlPost, true).then((response) => {
-
-                ecranFin.classList.remove('is-hidden');
+    const terminerDate = async(idVisiteur, idVisite) => {
+        try {
+            const response = await axios.put(
+                requeteUneDateTerminee(idVisiteur, idVisite),
+                true
+            );
+            if (response) {
+                ecranFin.classList.remove("is-hidden");
                 setTimeout(window.location.reload.bind(window.location), 3000);
-
-            });
+            } else {
+                sortirMessage.innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+            }
+        } catch (err) {
+            console.error(err);
         }
-    });
+    };
+
+    const requeteSortir = async() => {
+        try {
+            const response = await axios.get(requeteUnVisiteur(idVisiteur));
+            if (response.data) {
+                const visites = response.data;
+
+                for (const visite in visites) {
+                    terminerDate(idVisiteur, visite);
+                }
+            } else {
+                sortirMessage.innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    requeteSortir();
 };
 
 /*
@@ -429,4 +522,29 @@ const supprimerDatePerimee = (ev) => {
             }
         }
     });
+};
+
+/*
+ *
+ * reset values
+ *
+ */
+
+const resetValues = () => {
+    identificationForm.reset();
+    inscriptionForm.reset();
+    entrerForm.reset();
+    sortirForm.reset();
+    const screenshotImg = document.querySelector("#screenshot-img");
+    screenshotImg.removeAttribute("src");
+    if (!screenshotImg.classList.contains("is-hidden")) {
+        screenshotImg.classList.add("is-hidden");
+    }
+    if (!visiteFormationContainer.classList.contains("is-hidden")) {
+        visiteFormationContainer.classList.add("is-hidden");
+    }
+    if (!visitePersonnelContainer.classList.contains("is-hidden")) {
+        visitePersonnelContainer.classList.add("is-hidden");
+    }
+    console.log("YO");
 };

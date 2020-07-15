@@ -1,5 +1,6 @@
 import "bulma";
 import "./assets/style.scss";
+import "./assets/qrcode.min.js";
 import axios from "axios";
 
 const formatDate = (myDate) => {
@@ -18,8 +19,6 @@ const myTodayMinus15 = () => {
     myDate.setDate(myDate.getDate() - 15);
     return formatDate(myDate);
 };
-
-
 
 function isBetween(n, a, b) {
     return (n - a) * (n - b) <= 0;
@@ -50,11 +49,16 @@ const retour = document.querySelectorAll(".retour");
 const boutonSinscrire = document.querySelectorAll(".bouton-sinscrire a");
 const retourIdentification = document.querySelector(".retour-identification");
 
-ecranAccueil.addEventListener('click', ev => accueilHandler(ev));
-retour.forEach(el => { el.addEventListener('click', ev => retourHandler(ev)) });
-boutonSinscrire.forEach(el => { el.addEventListener('click', ev => boutonSinscrireHandler(ev)) });
-retourIdentification.addEventListener('click', ev => retourIdentificationHandler(ev));
-
+ecranAccueil.addEventListener("click", (ev) => accueilHandler(ev));
+retour.forEach((el) => {
+    el.addEventListener("click", (ev) => retourHandler(ev));
+});
+boutonSinscrire.forEach((el) => {
+    el.addEventListener("click", (ev) => boutonSinscrireHandler(ev));
+});
+retourIdentification.addEventListener("click", (ev) =>
+    retourIdentificationHandler(ev)
+);
 
 const accueilHandler = (ev) => {
     ev.preventDefault();
@@ -62,17 +66,18 @@ const accueilHandler = (ev) => {
 
     const target = ev.target.dataset.target;
     document.querySelector(target).classList.remove("is-hidden");
-
 };
 
 const retourHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A") return;
 
-    ecrans.forEach(element => {
-        if (!element.classList.contains("is-hidden") && element.id !== 'ecran-accueil') {
+    ecrans.forEach((element) => {
+        if (!element.classList.contains("is-hidden") &&
+            element.id !== "ecran-accueil"
+        ) {
             element.classList.add("is-hidden");
-        };
+        }
     });
 };
 
@@ -86,25 +91,21 @@ const retourIdentificationHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A") return;
     ecranInscription.classList.add("is-hidden");
-    ecranIdentification.querySelector(".message").innerHTML = '';
+    ecranIdentification.querySelector(".message").innerHTML = "";
 };
-
-
-
 
 /*
  *
  *
  *
- * 
+ *
  */
 const requeteVisiteurs = "https://ingrwf-08.firebaseio.com/visiteurs.json";
-const requeteUnVisiteur = idVisiteur => {
-    return "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json";
+const requeteUnVisiteur = (idVisiteur) => {
+    return (
+        "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites.json"
+    );
 };
-
-
-
 
 /*
  *
@@ -137,7 +138,8 @@ const identification = (ev) => {
 
             ecranEntrer.classList.remove("is-hidden");
         } else {
-            ecranIdentification.querySelector(".message").innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+            ecranIdentification.querySelector(".message").innerHTML =
+                "<p>Cet identifiant n'est pas correct</p>";
         }
     });
 };
@@ -286,7 +288,8 @@ const objetDeLaVisite = (ev) => {
 const entrer = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "BUTTON") return;
-    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel") return;
+    if (visiteObjet.value !== "formation" && visiteObjet.value !== "personnel")
+        return;
 
     let idVisite = "";
     let urlVisite = "";
@@ -296,7 +299,8 @@ const entrer = (ev) => {
         console.log(ev);
     } else if (visiteObjet.value === "personnel") {
         idVisite = visitePersonnel.value;
-        urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
+        urlVisite =
+            "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
     }
     const idVisiteur = visiteVisiteur.value;
 
@@ -311,32 +315,35 @@ const entrer = (ev) => {
         terminee: false,
     };
     axios.post(urlPost, nouvelleDate).then((response) => {
+        const requeteVisiteur =
+            "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
+        axios
+            .all([axios.get(requeteVisiteur), axios.get(urlVisite)])
+            .then((response) => {
+                const visiteur = response[0].data;
+                const visite = response[1].data;
 
-        const requeteVisiteur = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + ".json";
-        axios.all([
-            axios.get(requeteVisiteur),
-            axios.get(urlVisite)
-        ]).then((response) => {
-            const visiteur = response[0].data;
-            const visite = response[1].data;
+                let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
+                content += "<p>Nom:  " + visiteur.nom + "</p>";
+                content += "<p>Prénom:  " + visiteur.prenom + "</p>";
+                content += "<p>Identifiant: " + idVisiteur + "</p>";
+                content += "<br />";
+                if (visite.type === "membres_personnel") {
+                    content +=
+                        "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
+                }
+                if (visite.type === "formations") {
+                    content +=
+                        "<p>Vous venez ici pour la formation: " +
+                        visite.title.rendered +
+                        "</p>";
+                }
+                content +=
+                    "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
 
-            let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
-            content += "<p>Nom:  " + visiteur.nom + "</p>";
-            content += "<p>Prénom:  " + visiteur.prenom + "</p>";
-            content += "<p>Identifiant: " + idVisiteur + "</p>";
-            content += "<br />";
-            if (visite.type === "membres_personnel") {
-                content += "<p>Vous venez rendre visite à: " + visite.title.rendered + "</p>";
-            }
-            if (visite.type === "formations") {
-                content += "<p>Vous venez ici pour la formation: " + visite.title.rendered + "</p>";
-            }
-            content += "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
-
-            ecranProfil.querySelector(".profil-datas").innerHTML = content;
-            ecranProfil.classList.remove('is-hidden');
-        });
-
+                ecranProfil.querySelector(".profil-datas").innerHTML = content;
+                ecranProfil.classList.remove("is-hidden");
+            });
     });
 };
 
@@ -360,17 +367,21 @@ const terminerVisite = (ev) => {
         const visites = response.data;
 
         if (visites === null) {
-            ecranSortir.querySelector('.message').innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+            ecranSortir.querySelector(".message").innerHTML =
+                "<p>Cet identifiant n'est pas correct</p>";
         }
 
         for (const visite in visites) {
             console.log("no");
-            const urlPost = "https://ingrwf-08.firebaseio.com/visiteurs/" + idVisiteur + "/visites/" + visite + "/terminee.json";
+            const urlPost =
+                "https://ingrwf-08.firebaseio.com/visiteurs/" +
+                idVisiteur +
+                "/visites/" +
+                visite +
+                "/terminee.json";
             axios.put(urlPost, true).then((response) => {
-
-                ecranFin.classList.remove('is-hidden');
+                ecranFin.classList.remove("is-hidden");
                 setTimeout(window.location.reload.bind(window.location), 3000);
-
             });
         }
     });

@@ -4,6 +4,11 @@ import "./assets/style.scss";
 import "regenerator-runtime/runtime";
 import axios from "axios";
 import QRCode from "qrcode";
+import QrcodeDecoder from 'qrcode-decoder';
+//import jsQR from "jsqr";
+// import "./assets/instascan.min.js";
+// import "./partialsjs/jsqr.js";
+// import Instascan from 'instascan';
 
 const formatDate = (myDate) => {
     const myDay = ("0" + myDate.getDate()).slice(-2);
@@ -67,15 +72,7 @@ const accueilHandler = (ev) => {
 const retourHandler = (ev) => {
     ev.preventDefault();
     if (ev.target.tagName !== "A" && ev.target.tagName !== "BUTTON") return;
-
-    ecrans.forEach((element) => {
-        if (!element.classList.contains("is-hidden") &&
-            element.id !== "ecran-accueil"
-        ) {
-            element.classList.add("is-hidden");
-        }
-    });
-    resetValues();
+    location.reload();
 };
 
 const boutonSinscrireHandler = (ev) => {
@@ -83,7 +80,7 @@ const boutonSinscrireHandler = (ev) => {
     if (ev.target.tagName !== "A") return;
     inscriptionEcran.classList.remove("is-hidden");
 
-    const video = document.querySelector("video");
+    const video = document.querySelector("#capture");
     const screenshotButton = document.querySelector("#screenshot-button");
     const img = document.querySelector("#screenshot-img");
     const canvas = document.createElement("canvas");
@@ -550,3 +547,126 @@ const resetValues = () => {
         visitePersonnelContainer.classList.add("is-hidden");
     }
 };
+
+/*
+*
+*
+* Code Qr scan
+*
+*/
+
+function video01() {
+    var qr1 = new QrcodeDecoder();
+    async function startScan() {
+        if (!qr1.isCanvasSupported()) {
+            alert("Your browser doesn't match the required specs.");
+            throw new Error("Canvas and getUserMedia are required");
+        }
+
+        let code1 = await qr1.decodeFromCamera(document.querySelector("#qrscan-1"));
+        if (!IdentificationEcran.classList.contains("is-hidden")) {
+            console.log("code1: ", code1.data);
+            requeteIdentificationG(code1.data);
+        }
+    }
+    startScan();
+}
+video01();
+
+const requeteIdentificationG = async (idVisiteur) => {
+    try {
+        const response = await axios.get(requeteVisiteurs);
+        if (response.data[idVisiteur]) {
+            identificationInput.value = idVisiteur;
+            console.log(idVisiteur);
+
+            entrerEcran.classList.remove("is-hidden");
+        } else {
+            identificationMessage.innerHTML =
+                "<p>Cet identifiant n'est pas correct</p>";
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+function video02() {
+    var qr2 = new QrcodeDecoder();
+    async function startScan() {
+        if (!qr2.isCanvasSupported()) {
+            alert("Your browser doesn't match the required specs.");
+            throw new Error("Canvas and getUserMedia are required");
+        }
+
+        let code2 = await qr2.decodeFromCamera(document.querySelector("#qrscan-2"));
+
+        if (!sortirEcran.classList.contains("is-hidden")) {
+            console.log("code2: ", code2.data);
+            requeteSortirG(code2.data);
+        }
+    }
+    startScan();
+}
+video02();
+
+const terminerDate = async (idVisiteur, idVisite) => {
+    try {
+        const response = await axios.put(
+            requeteUneDateTerminee(idVisiteur, idVisite),
+            true
+        );
+        if (response) {
+            ecranFin.classList.remove("is-hidden");
+            setTimeout(window.location.reload.bind(window.location), 3000);
+        } else {
+            sortirMessage.innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const requeteSortirG = async (idVisiteur) => {
+    try {
+        const response = await axios.get(requeteUnVisiteur(idVisiteur));
+        if (response.data) {
+            const visites = response.data;
+
+            for (const visite in visites) {
+                terminerDate(idVisiteur, visite);
+            }
+        } else {
+            sortirMessage.innerHTML = "<p>Cet identifiant n'est pas correct</p>";
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
+requeteSortirG();
+
+
+/*
+ *
+ * Confidentialite
+ * 
+ */
+
+const confidentialiteContenu = () => {
+
+    const requeteConfC = async () => {
+        try {
+            const response = await axios.get(requeteWordpress + 'pages/31');
+            if (response.data) {
+
+                //console.log(response.data);
+                ecranConfidentialite.querySelector("header").innerHTML = '<h1>' + response.data.title.rendered + '</h1>';
+                ecranConfidentialite.querySelector("main").innerHTML = response.data.content.rendered;
+            } else {
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    requeteConfC();
+};
+confidentialiteContenu();

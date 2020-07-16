@@ -17,10 +17,13 @@
     "assets": "^3.0.1",
     "axios": "^0.19.2",
     "bulma": "^0.9.0",
+    "instascan": "^1.0.0",
+    "jsqr": "^1.3.1",
     "local-web-server": "^4.2.1",
     "parcel-bundler": "^1.12.4",
     "posthtml-loader": "^1.0.2",
-    "qrcode": "^1.4.4"
+    "qrcode": "^1.4.4",
+    "qrcode-decoder": "^0.1.2"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",

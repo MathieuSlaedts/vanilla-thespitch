@@ -9959,5 +9959,38 @@ header {
     margin: 0 auto;
   }
 }
+#jsqr__loadingMessage {
+  text-align: center;
+  padding: 40px;
+  background-color: #eee;
+}
+
+#jsqr__canvas {
+  width: 100%;
+}
+
+#jsqr__output {
+  margin-top: 20px;
+  background: #eee;
+  padding: 10px;
+  padding-bottom: 0;
+}
+
+#jsqr__output div {
+  padding-bottom: 10px;
+  word-wrap: break-word;
+}
+
+#jsqr__noQRFound {
+  text-align: center;
+}
+
+#qrscan-1,
+#qrscan-2 {
+  width: 100%;
+  max-width: 20rem;
+  margin: 0 auto;
+  border-radius: 5px;
+}
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */

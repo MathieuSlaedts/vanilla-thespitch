@@ -8057,9 +8057,9 @@ boutonSinscrire.forEach(function (el) {
     return boutonSinscrireHandler(ev);
   });
 });
-retourIdentification.addEventListener("click", function (ev) {
-  return retourIdentificationHandler(ev);
-});
+/* retourIdentification.addEventListener("click", (ev) =>
+    retourIdentificationHandler(ev)
+); */
 
 var accueilHandler = function accueilHandler(ev) {
   ev.preventDefault();
@@ -8070,7 +8070,7 @@ var accueilHandler = function accueilHandler(ev) {
 
 var retourHandler = function retourHandler(ev) {
   ev.preventDefault();
-  if (ev.target.tagName !== "A") return;
+  if (ev.target.tagName !== "A" && ev.target.tagName !== "BUTTON") return;
   ecrans.forEach(function (element) {
     if (!element.classList.contains("is-hidden") && element.id !== "ecran-accueil") {
       element.classList.add("is-hidden");
@@ -8118,7 +8118,7 @@ var retourIdentificationHandler = function retourIdentificationHandler(ev) {
 
 
 var requeteFirebase = "https://ingrwf-08.firebaseio.com/visiteurs";
-var requeteWordpress = "http://mathieu.go.yo.fr/wp-json/wp/v2/";
+var requeteWordpress = "https://mathieu.go.yo.fr/wp-json/wp/v2/";
 var requeteVisiteurs = requeteFirebase + ".json";
 var requeteFormations = requeteWordpress + "formations";
 var requetePersonnels = requeteWordpress + "membres_personnel";
@@ -8442,11 +8442,11 @@ var entrer = function entrer(ev) {
 
   if (visiteObjet.value === "formation") {
     idVisite = visiteFormation.value;
-    urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
+    urlVisite = "https://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
     console.log(ev);
   } else if (visiteObjet.value === "personnel") {
     idVisite = visitePersonnel.value;
-    urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
+    urlVisite = "https://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
   }
 
   var idVisiteur = visiteVisiteur.value;
@@ -8464,8 +8464,9 @@ var entrer = function entrer(ev) {
     _axios.default.all([_axios.default.get(requeteVisiteur), _axios.default.get(urlVisite)]).then(function (response) {
       var visiteur = response[0].data;
       var visite = response[1].data;
-      var content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
-      content += "<div class='img-container'>";
+      var contentTitle = "<h1>Bonjour " + visiteur.prenom + ", bienvenue</h1>";
+      contentTitle += "<p>Voici votre étiquette de visite</p>";
+      var content = "<div class='profil__images'>";
 
       var generateQR = /*#__PURE__*/function () {
         var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(text) {
@@ -8476,7 +8477,7 @@ var entrer = function entrer(ev) {
                   _context5.prev = 0;
                   _context5.next = 3;
                   return _qrcode.default.toDataURL(text, {}, function (err, url) {
-                    content += "<img src=" + url + " />"; //console.log(url);
+                    content += "<div class='profil__qr'><img src=" + url + " /></div>"; //console.log(url);
                   });
 
                 case 3:
@@ -8502,7 +8503,7 @@ var entrer = function entrer(ev) {
       }();
 
       generateQR(idVisiteur);
-      content += "<img src=" + visiteur.photo + " />";
+      content += "<div class='profil__photo'><img src=" + visiteur.photo + " /></div>";
       content += "</div>";
       content += "<p>Nom:  " + visiteur.nom + "</p>";
       content += "<p>Prénom:  " + visiteur.prenom + "</p>";
@@ -8518,7 +8519,8 @@ var entrer = function entrer(ev) {
       }
 
       content += "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
-      ecranProfil.querySelector(".profil-datas").innerHTML = content;
+      ecranProfil.querySelector("header").insertAdjacentHTML("afterbegin", contentTitle);
+      ecranProfil.querySelector(".profil__donnees").innerHTML = content;
       ecranProfil.classList.remove("is-hidden");
     });
   });
@@ -8707,8 +8709,6 @@ var resetValues = function resetValues() {
   if (!visitePersonnelContainer.classList.contains("is-hidden")) {
     visitePersonnelContainer.classList.add("is-hidden");
   }
-
-  console.log("YO");
 };
 },{"bulma":"../node_modules/bulma/bulma.sass","./assets/style.scss":"assets/style.scss","regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","axios":"../node_modules/axios/index.js","qrcode":"../node_modules/qrcode/lib/browser.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -8738,7 +8738,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61949" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61880" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

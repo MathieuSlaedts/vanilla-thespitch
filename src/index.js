@@ -52,9 +52,9 @@ retour.forEach((el) => {
 boutonSinscrire.forEach((el) => {
     el.addEventListener("click", (ev) => boutonSinscrireHandler(ev));
 });
-retourIdentification.addEventListener("click", (ev) =>
+/* retourIdentification.addEventListener("click", (ev) =>
     retourIdentificationHandler(ev)
-);
+); */
 
 const accueilHandler = (ev) => {
     ev.preventDefault();
@@ -66,7 +66,7 @@ const accueilHandler = (ev) => {
 
 const retourHandler = (ev) => {
     ev.preventDefault();
-    if (ev.target.tagName !== "A") return;
+    if (ev.target.tagName !== "A" && ev.target.tagName !== "BUTTON") return;
 
     ecrans.forEach((element) => {
         if (!element.classList.contains("is-hidden") &&
@@ -118,7 +118,7 @@ const retourIdentificationHandler = (ev) => {
  *
  */
 const requeteFirebase = "https://ingrwf-08.firebaseio.com/visiteurs";
-const requeteWordpress = "http://mathieu.go.yo.fr/wp-json/wp/v2/";
+const requeteWordpress = "https://mathieu.go.yo.fr/wp-json/wp/v2/";
 
 const requeteVisiteurs = requeteFirebase + ".json";
 const requeteFormations = requeteWordpress + "formations";
@@ -165,7 +165,7 @@ const identification = (ev) => {
         return;
     }
 
-    const requeteIdentification = async() => {
+    const requeteIdentification = async () => {
         try {
             const response = await axios.get(requeteVisiteurs);
             if (response.data[idVisiteur]) {
@@ -205,7 +205,7 @@ const inscription = (ev) => {
         email: inscriptionForm.querySelector("#inscription-email").value,
         photo: document.querySelector("#screenshot-img").src,
     };
-    const requeteInscription = async() => {
+    const requeteInscription = async () => {
         try {
             const response = await axios.post(requeteVisiteurs, nouveauVisiteur);
             if (response.data) {
@@ -245,7 +245,7 @@ const objetDeLaVisite = (ev) => {
 
     /* Formation */
     if (ev.target.value === "formation") {
-        const requeteFormationsS = async() => {
+        const requeteFormationsS = async () => {
             try {
                 const response = await axios.get(requeteFormations);
                 if (response.data) {
@@ -287,12 +287,12 @@ const objetDeLaVisite = (ev) => {
             }
         };
         requeteFormationsS();
-        axios.get(requeteFormations).then((response) => {});
+        axios.get(requeteFormations).then((response) => { });
     }
 
     /* Personnel */
     if (ev.target.value === "personnel") {
-        const requetePersonnelS = async() => {
+        const requetePersonnelS = async () => {
             try {
                 const response = await axios.get(requetePersonnels);
                 if (response.data) {
@@ -323,7 +323,7 @@ const objetDeLaVisite = (ev) => {
             }
         };
         requetePersonnelS();
-        axios.get(requetePersonnels).then((response) => {});
+        axios.get(requetePersonnels).then((response) => { });
     }
 };
 
@@ -347,12 +347,12 @@ const entrer = (ev) => {
     let urlVisite = "";
     if (visiteObjet.value === "formation") {
         idVisite = visiteFormation.value;
-        urlVisite = "http://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
+        urlVisite = "https://mathieu.go.yo.fr/wp-json/wp/v2/formations/" + idVisite;
         console.log(ev);
     } else if (visiteObjet.value === "personnel") {
         idVisite = visitePersonnel.value;
         urlVisite =
-            "http://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
+            "https://mathieu.go.yo.fr/wp-json/wp/v2/membres_personnel/" + idVisite;
     }
     const idVisiteur = visiteVisiteur.value;
 
@@ -375,12 +375,14 @@ const entrer = (ev) => {
                 const visiteur = response[0].data;
                 const visite = response[1].data;
 
-                let content = "<h1>Bonjour " + visiteur.prenom + ", bonne visite</h1>";
-                content += "<div class='img-container'>";
-                const generateQR = async(text) => {
+                let contentTitle = "<h1>Bonjour " + visiteur.prenom + ", bienvenue</h1>";
+                contentTitle += "<p>Voici votre étiquette de visite</p>"
+
+                let content = "<div class='profil__images'>";
+                const generateQR = async (text) => {
                     try {
-                        qrCode = await QRCode.toDataURL(text, {}, function(err, url) {
-                            content += "<img src=" + url + " />";
+                        qrCode = await QRCode.toDataURL(text, {}, function (err, url) {
+                            content += "<div class='profil__qr'><img src=" + url + " /></div>";
                             //console.log(url);
                         });
                     } catch (err) {
@@ -389,7 +391,7 @@ const entrer = (ev) => {
                 };
                 generateQR(idVisiteur);
 
-                content += "<img src=" + visiteur.photo + " />";
+                content += "<div class='profil__photo'><img src=" + visiteur.photo + " /></div>";
 
                 content += "</div>";
 
@@ -410,7 +412,8 @@ const entrer = (ev) => {
                 content +=
                     "<p>Veuillez vous rendre au Local: " + visite.acf.local + "</p>";
 
-                ecranProfil.querySelector(".profil-datas").innerHTML = content;
+                ecranProfil.querySelector("header").insertAdjacentHTML("afterbegin", contentTitle);
+                ecranProfil.querySelector(".profil__donnees").innerHTML = content;
                 ecranProfil.classList.remove("is-hidden");
             });
     });
@@ -437,7 +440,7 @@ const terminerVisite = (ev) => {
         return;
     }
 
-    const terminerDate = async(idVisiteur, idVisite) => {
+    const terminerDate = async (idVisiteur, idVisite) => {
         try {
             const response = await axios.put(
                 requeteUneDateTerminee(idVisiteur, idVisite),
@@ -454,7 +457,7 @@ const terminerVisite = (ev) => {
         }
     };
 
-    const requeteSortir = async() => {
+    const requeteSortir = async () => {
         try {
             const response = await axios.get(requeteUnVisiteur(idVisiteur));
             if (response.data) {
@@ -546,5 +549,4 @@ const resetValues = () => {
     if (!visitePersonnelContainer.classList.contains("is-hidden")) {
         visitePersonnelContainer.classList.add("is-hidden");
     }
-    console.log("YO");
 };

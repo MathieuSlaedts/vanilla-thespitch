@@ -5,25 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Spitch</title>
-<link rel="stylesheet" href="/src.e31bb0bc.css"></head>
+    <link rel="stylesheet" href="/print.07f96019.css" media="print">
+<script src="/print.07f96019.js"></script><link rel="stylesheet" href="/src.e31bb0bc.css"></head>
 
 <body>
     <div id="the-spitch">
         <div id="ecran-accueil" class="ecran">
-  <a href="#ecran-identification" data-target="#ecran-identification" class="button is-large accueil__entrer">Enter
-    dans le batiment</a>
-  <a href="#ecran-sortir" data-target="#ecran-sortir" class="button is-large accueil__sortir">Sortir du batiment</a>
-  <a href="#ecran-confidentialite" data-target="#ecran-confidentialite" class="button is-large accueil__vp">Consulter
-    vie
-    privée</a>
+  <div>
+    <a href="#ecran-identification" data-target="#ecran-identification" class="button is-large accueil__entrer">Enter
+      dans le batiment</a>
+    <a href="#ecran-sortir" data-target="#ecran-sortir" class="button is-large accueil__sortir">Sortir du batiment</a>
+    <a href="#ecran-confidentialite" data-target="#ecran-confidentialite" class="button is-large accueil__vp">Consulter
+      vie
+      privée</a>
+  </div>
 </div>
         <div id="ecran-identification" class="ecran is-hidden">
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
-        <h1>Identification</h1>
+        <header>
+            <h1>Identification</h1>
+        </header>
+
         <form id="identification">
             <p>
-                Vous vous êtes inscrit et êtes entré dans le batiments il y a moins de 15 jours:
+                Vous vous êtes inscrit et êtes entré dans le bâtiment il y a moins de 15 jours:
             </p>
             <div class="field">
                 <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
@@ -41,10 +47,9 @@
         <div class="message"></div>
         <div class="bouton-sinscrire">
             <div class="box">
-                <p>
-                    Vous n'êtes pas encore inscrit ?
-                    <a href="#" class="button">S'incrire</a>
-                </p>
+                <p>Vous n'êtes pas encore inscrit ?</p>
+                <p><a href="#" class="button">S'incrire</a></p>
+
             </div>
         </div>
     </div>
@@ -52,15 +57,17 @@
         <div id="ecran-inscription" class="ecran is-hidden">
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
-        <h1>Inscription</h1>
+        <header>
+            <h1>Inscription</h1>
+        </header>
         <div id="screenshot" style="text-align: center;">
             <div>
                 <video class="videostream" autoplay=""></video>
                 <img id="screenshot-img" class="is-hidden">
             </div>
             <button id="screenshot-button" class="button is-small">
-        Take screenshot
-      </button>
+                Prendre une photo
+            </button>
         </div>
         <form id="inscription">
             <div class="field">
@@ -87,24 +94,24 @@
                 </div>
             </div>
         </form>
-        <p>
-            <a href="#" class="retour-identification button">Retour à l'identification</a>
-    </p>
-  </div>
+    </div>
 </div>
         <div id="ecran-entrer" class="ecran is-hidden">
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
-        <h1>Entrer</h1>
+        <header>
+            <h1>Entrer dans le bâtiment</h1>
+        </header>
+
         <form id="entrer">
             <div class="field">
                 <div class="control">
                     <div class="select">
                         <select id="visite-objet">
-              <option value="">Veuillez sélectionner l'objet de votre visite</option>
-              <option value="formation">Suivre une formation</option>
-              <option value="personnel">Rencontrer un membre du personnel</option>
-            </select>
+                            <option value="">Veuillez sélectionner l'objet de votre visite</option>
+                            <option value="formation">Suivre une formation</option>
+                            <option value="personnel">Rencontrer un membre du personnel</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -112,8 +119,8 @@
                 <div class="control">
                     <div class="select">
                         <select id="visite-formation" class="visite-option">
-              <option value="">Veuillez sélectionner une formation</option>
-            </select>
+                            <option value="">Veuillez sélectionner une formation</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -121,8 +128,8 @@
                 <div class="control">
                     <div class="select">
                         <select id="visite-personnel" class="visite-option">
-              <option value="">Veuillez sélectionner un membre du personnel</option>
-            </select>
+                            <option value="">Veuillez sélectionner un membre du personnel</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -140,7 +147,9 @@
         <div id="ecran-sortir" class="ecran is-hidden">
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
-        <h1>Sortir</h1>
+        <header>
+            <h1>Sortir</h1>
+        </header>
         <form id="sortir">
             <div class="field">
                 <label class="label" for="id-visiteur">Entrez votre identifiant:</label>
@@ -164,14 +173,24 @@
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
 
-        <div class="profil-datas"></div>
+        <header></header>
+        <main>
+            <div class="profil">
+                <div class="profil__donnees box"></div>
+                <div class="profil__actions">
+                    <button class="profil__imprimer button" onclick="window.print();return false;">Imprimer
+                        l'étiquette</button>
+                    <button class="profil__retour retour button">Retour à l'accueil</button>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
         <div id="ecran-fin" class="ecran is-hidden">
     <div>
         <a href="#" class="retour button">Retour à l'accueil</a>
 
-        <div class="profil-datas">
+        <div>
             <h1>Merdi pour votre visite</h1>
             <p>A bientot</p>
         </div>
@@ -180,11 +199,21 @@
         <div id="ecran-confidentialite" class="ecran is-hidden">
     <div>
         <a href="#" class="button retour">Retour à l'accueil</a>
-        <h1>Politique de Confidentialité</h1>
-        <p>
-            <strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em>            Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed,
-            <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.
-        </p>
+        <header>
+            <h1>Politique de Confidentialité</h1>
+        </header>
+        <main>
+            <p>
+                <strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis
+                egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero
+                sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo.
+                Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed,
+                <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum,
+                eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis
+                pulvinar facilisis. Ut felis.
+            </p>
+
+        </main>
     </div>
 </div>
     </div>

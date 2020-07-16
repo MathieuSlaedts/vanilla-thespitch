@@ -9837,7 +9837,8 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   padding: 3rem 1.5rem 6rem;
 }
 .ecran {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   align-content: center;
@@ -9846,20 +9847,25 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   background-color: white;
   width: 100%;
   height: 100vh;
+  padding: 1.5rem;
 }
 .ecran > div {
-  width: 30rem;
+  width: 100%;
+  max-width: 30rem;
 }
 
-.retour {
+.ecran > div > .retour {
   position: absolute;
   top: 2rem;
   left: 2rem;
 }
 
 h1 {
-  margin-bottom: 3rem;
   font-size: 2rem;
+}
+
+header {
+  margin-bottom: 2rem;
 }
 
 .bouton-sinscrire {
@@ -9871,8 +9877,9 @@ h1 {
 }
 
 #ecran-accueil a {
-  width: 20rem;
-  margin: 1rem;
+  width: 100%;
+  margin: 1.5rem;
+  display: block;
 }
 
 #ecran-inscription form + p {
@@ -9917,13 +9924,40 @@ h1 {
   background-color: #eee;
 }
 
-.img-container {
-  display: flex;
+@media screen and (min-width: 521px) {
+  .profil__images {
+    display: flex;
+  }
+  .profil__images div {
+    width: 50%;
+    padding-top: 50%;
+    position: relative;
+  }
+  .profil__images img {
+    border: 1px solid #eee;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
-.img-container img {
-  border: 1px solid #eee;
-  width: 15rem;
-  height: calc(15rem / 16 * 12);
+@media screen and (max-width: 520px) {
+  .profil__images {
+    display: block;
+  }
+  .profil__images div {
+    width: 100%;
+  }
+  .profil__images .profil__photo {
+    display: none;
+  }
+  .profil__images img {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
 }
 
 /*# sourceMappingURL=/src.e31bb0bc.css.map */

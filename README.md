@@ -41,3 +41,9 @@ Lien vers un code QR de test
 ```
 https://mathieu.go.yo.fr/code-qr-test.png
 ```
+
+Identifiant de test
+
+```
+-MCMoOKkT8uXXgN9sPqR
+```

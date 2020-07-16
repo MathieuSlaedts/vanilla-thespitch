@@ -642,7 +642,6 @@ const requeteSortirG = async (idVisiteur) => {
         console.error(err);
     }
 };
-requeteSortirG();
 
 
 /*
